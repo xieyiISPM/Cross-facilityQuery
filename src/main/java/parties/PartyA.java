@@ -8,7 +8,7 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PartyA implements PartyInterFace {
+public class PartyA implements PartyInterface {
     private int bitSize;
     private Map<Integer, BigInteger[]> randomArrayPool = new HashMap<>();
     private SecureRandom srand = new SecureRandom();
