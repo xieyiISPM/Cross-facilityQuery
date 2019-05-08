@@ -69,10 +69,15 @@ public class PartyB implements PartyInterface {
     }
 
     public BigInteger[] getL2(Integer key){
+
         return L2Pool.get(key);
     }
 
     public BigInteger[] getL0(Integer key){
+        if(!L0Pool.containsKey(key)){
+            addToRandomArrayPool(key);
+            addToL0PooL(randomArrayPool.get(key));
+        }
         return L0Pool.get(key);
     }
 

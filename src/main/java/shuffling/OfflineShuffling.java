@@ -16,6 +16,7 @@ public class OfflineShuffling {
         this.partyA = partyA;
         this.partyB = partyB;
         this.arraySize = arraySize;
+
     }
 
     public BigInteger[] getL0FromPartyB(){
@@ -24,14 +25,17 @@ public class OfflineShuffling {
     }
 
     public BigInteger[] getL1FromPartyA(){
+        partyA.addToL1Pool(L0);
         L1 = partyA.getL1(arraySize);
         return L1;
     }
 
     public BigInteger[] getL2FromPartyB(){
+        partyB.addToL2Pool(L1);
         L2 = partyB.getL2(arraySize);
         return L2;
     }
+
 
 
 }
