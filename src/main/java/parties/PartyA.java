@@ -1,0 +1,67 @@
+package parties;
+
+import com.n1analytics.paillier.PaillierPublicKey;
+import helper.SecureHelper;
+
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
+
+public class PartyA implements PartyInterFace {
+    private int bitSize;
+    private Map<Integer, BigInteger[]> randomArrayPool = new HashMap<>();
+    private SecureRandom srand = new SecureRandom();
+    private Map<Integer, BigInteger[]> L1Pool = new HashMap<>();
+    SecureHelper sh = new SecureHelper(bitSize);
+    private PaillierPublicKey pk;
+    private Map<Integer, Integer[]> piPool = new HashMap<>();
+    private BigInteger twoToL;
+
+
+    public PartyA(int bitSize, PaillierPublicKey pk){
+        this.bitSize = bitSize;
+        this.pk = pk;
+        twoToL = BigInteger.TWO.pow(bitSize);
+    }
+    @Override
+    public void addToRandomArrayPool(Integer arrSize){
+        randomArrayPool.put(arrSize, sh.genRandomArray(arrSize, srand));
+        piPool.put(arrSize,sh.genPi(arrSize));
+    }
+
+    @Override
+    public BigInteger[] getRandomArray(Integer key){
+        return randomArrayPool.get(key);
+    }
+
+    public void addToL1Pool(BigInteger[] L0){
+        Integer arraySize = L0.length;
+        if(!randomArrayPool.containsKey(arraySize)){
+            addToRandomArrayPool(arraySize);
+        }
+        BigInteger[] U = getRandomArray(arraySize);
+
+        BigInteger[] rArray = sh.genRandomArray(arraySize, srand);
+
+        BigInteger L1[] = new BigInteger[arraySize];
+        for(int i=0; i< arraySize; i++){
+            BigInteger uPlusR = pk.raw_encrypt((U[i].add(rArray[i])).mod(twoToL));
+            L1[i] = pk.raw_add(L0[i], uPlusR);
+            //L1[i] = (L0[i].multiply(uPlusR)).mod(paillierPublicKey.getModulusSquared());
+        }
+
+        if(!piPool.containsKey(arraySize)){
+            piPool.put(arraySize,sh.genPi(arraySize));
+        }
+        Integer[] pi = piPool.get(arraySize);
+        L1Pool.put(arraySize,sh.permRandomArray(L1,pi));
+    }
+
+    public BigInteger[] getL1(Integer key){
+        return L1Pool.get(key);
+    }
+
+
+
+}
