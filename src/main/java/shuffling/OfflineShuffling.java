@@ -6,12 +6,12 @@ import parties.PartyB;
 import java.math.BigInteger;
 
 public class OfflineShuffling {
-    PartyA partyA;
-    PartyB partyB;
-    int arraySize;
-    BigInteger[] L0;
-    BigInteger[] L1;
-    BigInteger[] L2;
+    private PartyA partyA;
+    private PartyB partyB;
+    private int arraySize;
+    private BigInteger[] L0;
+    private BigInteger[] L1;
+    private BigInteger[] L2;
     public OfflineShuffling(PartyA partyA, PartyB partyB, int arraySize){
         this.partyA = partyA;
         this.partyB = partyB;
