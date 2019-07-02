@@ -2,6 +2,10 @@ package parties;
 
 import com.n1analytics.paillier.PaillierPublicKey;
 import helper.SecureHelper;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import paillier.PaillierPair;
 import paillier.PaillierSetup;
 
 import java.math.BigInteger;
@@ -10,37 +14,50 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PartyB implements PartyInterface {
+    @Getter
+    @Setter
     private int bitSize;
-    private Map<Integer, BigInteger[]> randomArrayPool = new HashMap<>();
+
+    private Map<Integer, BigInteger[]> VArrayPool = new HashMap<>();
     private SecureRandom srand = new SecureRandom();
 
     private Map<Integer, BigInteger[]> L0Pool = new HashMap<>();
     private Map<Integer, BigInteger[]> L2Pool = new HashMap<>();
 
     private SecureHelper sh = new SecureHelper(bitSize);
-    private PaillierSetup ps;
-    private BigInteger twoToL;
+    private PaillierPair paillierPair;
+
+    @Getter
+    private BigInteger twoToL  = BigInteger.TWO.pow(bitSize);
+    ;
 
 
+    public  PartyB(){
+
+    }
     public PartyB(int bitSize){
         this.bitSize = bitSize;
-        ps = new PaillierSetup(bitSize);
         twoToL = BigInteger.TWO.pow(bitSize);
     }
 
+    @Autowired
+    public void setPaillierPair(PaillierPair paillierPair){
+        this.paillierPair = paillierPair;
+    }
+
     public PaillierPublicKey distributePublicKey(){
-        return ps.getPublicKey();
+        return paillierPair.getPaillierPublicKey();
     }
 
 
     @Override
     public void addToRandomArrayPool(Integer arrSize){
-        randomArrayPool.put(arrSize, sh.genRandomArray(arrSize, srand));
+        VArrayPool.put(arrSize, sh.genRandomArray(arrSize, srand));
     }
 
     @Override
     public BigInteger[] getRandomArray(Integer key){
-        return randomArrayPool.get(key);
+        return VArrayPool.get(key);
     }
 
     public void addToL0PooL(BigInteger[] arr){
@@ -49,7 +66,7 @@ public class PartyB implements PartyInterface {
         }
         BigInteger L0[] = new BigInteger[arr.length];
         for(int i = 0; i< L0.length; i++){
-            L0[i] = ps.getPublicKey().raw_encrypt(arr[i]);
+            L0[i] = paillierPair.getPaillierPublicKey().raw_encrypt(arr[i]);
         }
         //System.out.println("L0: ");
         //printList(L0);
@@ -60,7 +77,7 @@ public class PartyB implements PartyInterface {
         BigInteger[] L2 = new BigInteger[L1.length];
 
         for(int i= 0; i< L1.length; i++){
-            L2[i] = ps.getPrivateKey().raw_decrypt(L1[i]);
+            L2[i] = paillierPair.getPaillierPrivateKey().raw_decrypt(L1[i]);
             L2[i] = (L2[i].mod(twoToL)).negate();
         }
         //System.out.println("L2");
@@ -76,7 +93,7 @@ public class PartyB implements PartyInterface {
     public BigInteger[] getL0(Integer key){
         if(!L0Pool.containsKey(key)){
             addToRandomArrayPool(key);
-            addToL0PooL(randomArrayPool.get(key));
+            addToL0PooL(VArrayPool.get(key));
         }
         return L0Pool.get(key);
     }
