@@ -4,6 +4,8 @@ import com.n1analytics.paillier.PaillierPublicKey;
 import helper.SecureHelper;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -28,6 +30,8 @@ public class PartyA implements PartyInterface {
     @Getter
     private BigInteger twoToL;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     public PartyA(int bitSize){
         this.bitSize = bitSize;
         twoToL = BigInteger.TWO.pow(bitSize);
@@ -44,8 +48,8 @@ public class PartyA implements PartyInterface {
 
     @Override
     public void addToRandomArrayPool(Integer arrSize){
-        UArrayPool.put(arrSize, sh.genRandomArray(arrSize, srand));
-        piPool.put(arrSize,sh.genPi(arrSize));
+            UArrayPool.put(arrSize, sh.genRandomArray(arrSize, srand));
+            piPool.put(arrSize, sh.genPi(arrSize));
     }
 
     @Override
@@ -53,10 +57,21 @@ public class PartyA implements PartyInterface {
         return UArrayPool.get(key);
     }
 
+    /**
+     * Generate L1'
+     * @param L0
+     */
     public void addToL1Pool(BigInteger[] L0){
         Integer arraySize = L0.length;
+        if(L1Pool.containsKey(arraySize)){
+            logger.warn(this.getClass() + "L1Pool has " + arraySize + " key");
+            return;
+        }
         if(!UArrayPool.containsKey(arraySize)){
             addToRandomArrayPool(arraySize);
+        }
+        else{
+            logger.warn(this.getClass()+"UArrayPool has "+ arraySize + " key");
         }
         BigInteger[] U = getRandomArray(arraySize);
 
@@ -71,6 +86,9 @@ public class PartyA implements PartyInterface {
 
         if(!piPool.containsKey(arraySize)){
             piPool.put(arraySize,sh.genPi(arraySize));
+        }
+        else{
+            logger.warn(this.getClass()+"piPool has "+ arraySize + " key");
         }
         Integer[] pi = piPool.get(arraySize);
         L1Pool.put(arraySize,sh.permRandomArray(L1,pi));

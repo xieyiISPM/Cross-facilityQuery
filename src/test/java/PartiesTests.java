@@ -1,4 +1,5 @@
 import config.appConfiguration;
+import helper.Helper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,9 +34,20 @@ public class PartiesTests {
 
         BigInteger[] uArray = partyA.getRandomArray(arraySize);
         Assert.assertEquals(arraySize, uArray.length);
-        for(int i = 0; i< uArray.length;i++){
-            System.out.print(uArray[i] + " ");
-        }
-        System.out.println();
+        Helper.printList(uArray);
+    }
+
+    @Test
+    public void partBL0Generation(){
+        int bitSize = 5;
+        int arraySize = 5;
+        partyB.setBitSize(bitSize);
+        partyB.addToRandomArrayPool(arraySize);
+
+        partyB.addToL0PooL(partyB.getRandomArray(arraySize));
+        Assert.assertNotNull(partyB.getL0(arraySize));
+        Assert.assertEquals(arraySize,partyB.getL0(arraySize).length);
+        Helper.printList(partyB.getL0(arraySize));
+
     }
 }

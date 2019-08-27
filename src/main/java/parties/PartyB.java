@@ -4,6 +4,8 @@ import com.n1analytics.paillier.PaillierPublicKey;
 import helper.SecureHelper;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import paillier.PaillierPair;
 import paillier.PaillierSetup;
@@ -25,11 +27,13 @@ public class PartyB implements PartyInterface {
     private Map<Integer, BigInteger[]> L2Pool = new HashMap<>();
 
     private SecureHelper sh = new SecureHelper(bitSize);
+
     private PaillierPair paillierPair;
 
     @Getter
     private BigInteger twoToL  = BigInteger.TWO.pow(bitSize);
-    ;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     public  PartyB(){
@@ -61,6 +65,10 @@ public class PartyB implements PartyInterface {
     }
 
     public void addToL0PooL(BigInteger[] arr){
+        if(L0Pool.containsKey(arr.length)){
+            logger.warn(this.getClass() + "L1Pool has " + arr.length + " key");
+            return;
+        }
         if (arr == null){
             throw new NullPointerException();
         }
@@ -73,16 +81,20 @@ public class PartyB implements PartyInterface {
         L0Pool.put(arr.length, L0);
     }
 
-    public void addToL2Pool(BigInteger[] L1){
-        BigInteger[] L2 = new BigInteger[L1.length];
+    public void addToL2Pool(BigInteger[] L1Prime){
+        if(L2Pool.containsKey(L1Prime.length)){
+            logger.warn(this.getClass() + "L2Pool has " + L1Prime.length + " key");
+            return;
+        }
+        BigInteger[] L2 = new BigInteger[L1Prime.length];
 
-        for(int i= 0; i< L1.length; i++){
-            L2[i] = paillierPair.getPaillierPrivateKey().raw_decrypt(L1[i]);
+        for(int i= 0; i< L1Prime.length; i++){
+            L2[i] = paillierPair.getPaillierPrivateKey().raw_decrypt(L1Prime[i]);
             L2[i] = (L2[i].mod(twoToL)).negate();
         }
         //System.out.println("L2");
         //printList(L2);
-        L2Pool.put(L1.length, L2);
+        L2Pool.put(L1Prime.length, L2);
     }
 
     public BigInteger[] getL2(Integer key){
