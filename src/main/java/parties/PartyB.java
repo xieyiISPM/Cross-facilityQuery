@@ -3,12 +3,10 @@ package parties;
 import com.n1analytics.paillier.PaillierPublicKey;
 import helper.SecureHelper;
 import lombok.Getter;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import paillier.PaillierPair;
-import paillier.PaillierSetup;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -16,8 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PartyB implements PartyInterface {
-    @Getter
-    @Setter
+
     private int bitSize;
 
     private Map<Integer, BigInteger[]> VArrayPool = new HashMap<>();
@@ -26,8 +23,10 @@ public class PartyB implements PartyInterface {
     private Map<Integer, BigInteger[]> L0Pool = new HashMap<>();
     private Map<Integer, BigInteger[]> L2Pool = new HashMap<>();
 
-    private SecureHelper sh = new SecureHelper(bitSize);
+    @Autowired
+    private SecureHelper sh;
 
+    @Autowired
     private PaillierPair paillierPair;
 
     @Getter
@@ -42,11 +41,6 @@ public class PartyB implements PartyInterface {
     public PartyB(int bitSize){
         this.bitSize = bitSize;
         twoToL = BigInteger.TWO.pow(bitSize);
-    }
-
-    @Autowired
-    public void setPaillierPair(PaillierPair paillierPair){
-        this.paillierPair = paillierPair;
     }
 
     public PaillierPublicKey distributePublicKey(){
@@ -76,8 +70,7 @@ public class PartyB implements PartyInterface {
         for(int i = 0; i< L0.length; i++){
             L0[i] = paillierPair.getPaillierPublicKey().raw_encrypt(arr[i]);
         }
-        //System.out.println("L0: ");
-        //printList(L0);
+
         L0Pool.put(arr.length, L0);
     }
 
@@ -92,8 +85,6 @@ public class PartyB implements PartyInterface {
             L2[i] = paillierPair.getPaillierPrivateKey().raw_decrypt(L1Prime[i]);
             L2[i] = (L2[i].mod(twoToL)).negate();
         }
-        //System.out.println("L2");
-        //printList(L2);
         L2Pool.put(L1Prime.length, L2);
     }
 

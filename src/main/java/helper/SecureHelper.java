@@ -1,10 +1,10 @@
 package helper;
 
+import org.bouncycastle.pqc.math.linearalgebra.Permutation;
+
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Arrays;
-
-import org.bouncycastle.pqc.math.linearalgebra.Permutation;
 
 public class SecureHelper {
     int bitSize;

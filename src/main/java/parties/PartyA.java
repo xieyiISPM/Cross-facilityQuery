@@ -6,21 +6,29 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import paillier.PaillierPair;
 
+import javax.annotation.PostConstruct;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PartyA implements PartyInterface {
-    @Getter
-    @Setter
+
     private int bitSize;
 
     private Map<Integer, BigInteger[]> UArrayPool = new HashMap<>();
     private SecureRandom srand = new SecureRandom();
     private Map<Integer, BigInteger[]> L1Pool = new HashMap<>();
+    private Map<Integer, BigInteger[]> rArrayPool = new HashMap<>();
+
+    @Autowired
     private SecureHelper sh;
+
+    @Autowired
+    private PaillierPair paillierPair;
 
     @Setter
     @Getter
@@ -35,7 +43,6 @@ public class PartyA implements PartyInterface {
     public PartyA(int bitSize){
         this.bitSize = bitSize;
         twoToL = BigInteger.TWO.pow(bitSize);
-        sh = new SecureHelper(bitSize);
     }
 
     public PartyA(int bitSize, PaillierPublicKey pk){
@@ -43,6 +50,11 @@ public class PartyA implements PartyInterface {
         this.pk = pk;
         twoToL = BigInteger.TWO.pow(bitSize);
 
+    }
+
+    @PostConstruct
+    private void setPublicKey(){
+        pk = paillierPair.getPaillierPublicKey();
     }
 
 
@@ -76,6 +88,7 @@ public class PartyA implements PartyInterface {
         BigInteger[] U = getRandomArray(arraySize);
 
         BigInteger[] rArray = sh.genRandomArray(arraySize, srand);
+        rArrayPool.put(arraySize,rArray);
 
         BigInteger L1[] = new BigInteger[arraySize];
         for(int i=0; i< arraySize; i++){
@@ -88,7 +101,7 @@ public class PartyA implements PartyInterface {
             piPool.put(arraySize,sh.genPi(arraySize));
         }
         else{
-            logger.warn(this.getClass()+"piPool has "+ arraySize + " key");
+            logger.warn(this.getClass()+" piPool has "+ arraySize + " key");
         }
         Integer[] pi = piPool.get(arraySize);
         L1Pool.put(arraySize,sh.permRandomArray(L1,pi));
@@ -100,5 +113,13 @@ public class PartyA implements PartyInterface {
 
     public Integer[] getPi(Integer key){
         return piPool.get(key);
+    }
+
+    public BigInteger[] getRArray(Integer key){
+        return rArrayPool.get(key);
+    }
+
+    public BigInteger[] getUArray(Integer key){
+        return UArrayPool.get(key);
     }
 }
