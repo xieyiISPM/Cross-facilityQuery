@@ -74,7 +74,7 @@ public class PartyA implements PartyInterface {
      * Generate L1'
      * @param L0
      */
-    public void addToL1Pool(BigInteger[] L0){
+    private void addToL1Pool(BigInteger[] L0){
         Integer arraySize = L0.length;
         if(L1Pool.containsKey(arraySize)){
             logger.warn(this.getClass() + "L1Pool has " + arraySize + " key");
@@ -101,9 +101,11 @@ public class PartyA implements PartyInterface {
         L1Pool.put(arraySize,L1);
         if(!piPool.containsKey(arraySize)){
             piPool.put(arraySize,sh.genPi(arraySize));
+            logger.warn(this.getClass()+" piPool add "+ arraySize + " key");
+
         }
         else{
-            logger.warn(this.getClass()+" piPool has "+ arraySize + " key");
+            logger.info(this.getClass()+" piPool has "+ arraySize + " key");
         }
         Integer[] pi = piPool.get(arraySize);
         L1PrimePool.put(arraySize,sh.permRandomArray(L1,pi));
@@ -112,8 +114,9 @@ public class PartyA implements PartyInterface {
     public BigInteger[] getL1(Integer key){
         return L1Pool.get(key);
     }
-    public BigInteger[] getL1Prime(Integer key) {
-        return L1PrimePool.get(key);
+    public BigInteger[] getL1Prime(BigInteger[] L0) {
+        addToL1Pool(L0);
+        return L1PrimePool.get(L0.length);
     }
 
     public Integer[] getPi(Integer key){

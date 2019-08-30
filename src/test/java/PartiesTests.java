@@ -1,10 +1,12 @@
 import config.appConfiguration;
+import config.testConfiguration;
 import helper.Helper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -15,8 +17,9 @@ import parties.PartyB;
 import java.math.BigInteger;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes={appConfiguration.class})
-@TestPropertySource(properties = {"party.arraySize=6", "party.bitSize = 5"})
+@ContextConfiguration(classes={appConfiguration.class, testConfiguration.class})
+@TestPropertySource(properties = {"party.arraySize=10", "party.bitSize = 5"})
+@ComponentScan(basePackages = "test")
 public class PartiesTests {
     @Autowired
     private PaillierPair paillierPair;
@@ -33,7 +36,8 @@ public class PartiesTests {
     @Value("${party.bitSize}")
     private int bitSize;
 
-
+    @Autowired
+    private Helper helper;
 
     @Test
     public void simpleTest(){
@@ -42,44 +46,40 @@ public class PartiesTests {
 
         BigInteger[] uArray = partyA.getRandomArray(arraySize);
         Assert.assertEquals(arraySize, uArray.length);
-        Helper.printList(uArray);
+        helper.printList(uArray);
+
     }
 
     @Test
     public void partBL0Generation(){
+        BigInteger twoToL = BigInteger.TWO.pow(bitSize);
         partyB.addToRandomArrayPool(arraySize);
-        partyB.addToL0PooL(partyB.getRandomArray(arraySize));
+        BigInteger[] partyBL0 = partyB.getL0(arraySize);
         Assert.assertNotNull(partyB.getL0(arraySize));
-        Assert.assertEquals(arraySize,partyB.getL0(arraySize).length);
-        BigInteger[] L0 = partyB.getL0(arraySize);
-        BigInteger[] decryptedL0 = new BigInteger[L0.length];
-        int i = 0;
-        for(BigInteger bigInteger: L0){
-            decryptedL0[i] = paillierPair.getPaillierPrivateKey().raw_decrypt(bigInteger);
-            i++;
-        }
-        Helper.printList(decryptedL0);
+        Assert.assertEquals(arraySize,partyBL0.length);
+        BigInteger[] decryptedL0 = helper.getDecryptedArray(partyBL0, twoToL);
 
-        Assert.assertArrayEquals(partyB.getRandomArray(arraySize), decryptedL0);
+        helper.printList(decryptedL0);
+
+        Assert.assertArrayEquals(partyB.getVArray(arraySize), decryptedL0);
     }
 
     @Test
     public void partyAL1Test(){
         BigInteger twoToL = BigInteger.TWO.pow(bitSize);
-        partyB.addToRandomArrayPool(arraySize);
-        partyB.addToL0PooL(partyB.getRandomArray(arraySize));
+
         BigInteger[] partyBL0 = partyB.getL0(arraySize);
-        partyA.addToL1Pool(partyBL0);
+        BigInteger[] partyAL1Prime= partyA.getL1Prime(partyBL0);
         BigInteger[] partyAUArray = partyA.getUArray(arraySize);
         Assert.assertNotNull(partyBL0);
         Assert.assertNotNull(partyAUArray);
         Assert.assertNotNull(partyA.getL1(arraySize));
-        Assert.assertNotNull(partyA.getL1Prime(arraySize));
+        Assert.assertNotNull(partyAL1Prime);
 
         BigInteger[] partyARArray = partyA.getRArray(arraySize);
         BigInteger[] partyBVArray = partyB.getVArray(arraySize);
 
-/*        System.out.println("PartyA R Array");
+/*      System.out.println("PartyA R Array");
         Helper.printList(partyARArray);
 
         System.out.println("PartyB V Array");
@@ -93,21 +93,21 @@ public class PartiesTests {
             uPlusVPlusRArray[i] = ((partyAUArray[i].add(partyBVArray[i])).add(partyARArray[i])).mod(twoToL);
         }
 
-        System.out.println("u + v + r :");
-        Helper.printList(uPlusVPlusRArray);
+       /* System.out.println("u + v + r :");
+        helper.printList(uPlusVPlusRArray);*/
 
         BigInteger[] partyAL1 = partyA.getL1(arraySize);
 
-        BigInteger[] decryptedL1 = new BigInteger[arraySize];
-        for(int i = 0; i< arraySize; i++){
-            decryptedL1[i] = (paillierPair.getPaillierPrivateKey().raw_decrypt(partyAL1[i])).mod(twoToL);
-        }
+        BigInteger[] decryptedL1 = helper.getDecryptedArray(partyAL1, twoToL);
 
-
-        System.out.println("decryptedL1: ");
-        Helper.printList(decryptedL1);
+        /*System.out.println("decryptedL1: ");
+        helper.printList(decryptedL1);*/
 
         Assert.assertArrayEquals(decryptedL1,uPlusVPlusRArray);
+
+        BigInteger[] decryptedPartyAL1Prime = helper.getDecryptedArray(partyAL1Prime, twoToL);
+        Assert.assertArrayEquals(helper.permutedArrayOrder(decryptedL1, partyA.getPi(arraySize)),decryptedPartyAL1Prime );
+
 
     }
 

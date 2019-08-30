@@ -58,23 +58,24 @@ public class PartyB implements PartyInterface {
         return VArrayPool.get(key);
     }
 
-    public void addToL0PooL(BigInteger[] arr){
-        if(L0Pool.containsKey(arr.length)){
-            logger.warn(this.getClass() + "L1Pool has " + arr.length + " key");
+    private void addToL0PooL(int arraySize){
+        if(L0Pool.containsKey(arraySize)){
+            logger.warn(this.getClass() + "L0Pool has " + arraySize + " key");
             return;
         }
-        if (arr == null){
-            throw new NullPointerException();
+        else{
+            addToRandomArrayPool(arraySize);
+            BigInteger[] vArray = getRandomArray(arraySize);
+            BigInteger L0[] = new BigInteger[arraySize];
+            for(int i = 0; i< L0.length; i++){
+                L0[i] = paillierPair.getPaillierPublicKey().raw_encrypt(vArray[i]);
+            }
+            L0Pool.put(arraySize,L0);
+            logger.info(this.getClass() + "L0Pool has been add new random u array, with " + arraySize + " key");
         }
-        BigInteger L0[] = new BigInteger[arr.length];
-        for(int i = 0; i< L0.length; i++){
-            L0[i] = paillierPair.getPaillierPublicKey().raw_encrypt(arr[i]);
-        }
-
-        L0Pool.put(arr.length, L0);
     }
 
-    public void addToL2Pool(BigInteger[] L1Prime){
+    private void addToL2Pool(BigInteger[] L1Prime){
         if(L2Pool.containsKey(L1Prime.length)){
             logger.warn(this.getClass() + "L2Pool has " + L1Prime.length + " key");
             return;
@@ -88,16 +89,14 @@ public class PartyB implements PartyInterface {
         L2Pool.put(L1Prime.length, L2);
     }
 
-    public BigInteger[] getL2(Integer key){
+    public BigInteger[] getL2(BigInteger[] partyAL1Prime){
+        addToL2Pool(partyAL1Prime);
 
-        return L2Pool.get(key);
+        return L2Pool.get(partyAL1Prime.length);
     }
 
     public BigInteger[] getL0(Integer key){
-        if(!L0Pool.containsKey(key)){
-            addToRandomArrayPool(key);
-            addToL0PooL(VArrayPool.get(key));
-        }
+        addToL0PooL(key);
         return L0Pool.get(key);
     }
 
