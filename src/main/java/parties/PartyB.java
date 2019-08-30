@@ -101,6 +101,10 @@ public class PartyB implements PartyInterface {
         return L0Pool.get(key);
     }
 
+    public BigInteger[] getVArray(Integer key){
+        return VArrayPool.get(key);
+    }
+
 
 
 }

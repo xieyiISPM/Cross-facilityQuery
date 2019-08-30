@@ -22,6 +22,7 @@ public class PartyA implements PartyInterface {
     private Map<Integer, BigInteger[]> UArrayPool = new HashMap<>();
     private SecureRandom srand = new SecureRandom();
     private Map<Integer, BigInteger[]> L1Pool = new HashMap<>();
+    private Map<Integer, BigInteger[]> L1PrimePool = new HashMap<>();
     private Map<Integer, BigInteger[]> rArrayPool = new HashMap<>();
 
     @Autowired
@@ -87,7 +88,7 @@ public class PartyA implements PartyInterface {
         }
         BigInteger[] U = getRandomArray(arraySize);
 
-        BigInteger[] rArray = sh.genRandomArray(arraySize, srand);
+        BigInteger[] rArray = genRArray(arraySize);
         rArrayPool.put(arraySize,rArray);
 
         BigInteger L1[] = new BigInteger[arraySize];
@@ -97,6 +98,7 @@ public class PartyA implements PartyInterface {
             //L1[i] = (L0[i].multiply(uPlusR)).mod(paillierPublicKey.getModulusSquared());
         }
 
+        L1Pool.put(arraySize,L1);
         if(!piPool.containsKey(arraySize)){
             piPool.put(arraySize,sh.genPi(arraySize));
         }
@@ -104,11 +106,14 @@ public class PartyA implements PartyInterface {
             logger.warn(this.getClass()+" piPool has "+ arraySize + " key");
         }
         Integer[] pi = piPool.get(arraySize);
-        L1Pool.put(arraySize,sh.permRandomArray(L1,pi));
+        L1PrimePool.put(arraySize,sh.permRandomArray(L1,pi));
     }
 
     public BigInteger[] getL1(Integer key){
         return L1Pool.get(key);
+    }
+    public BigInteger[] getL1Prime(Integer key) {
+        return L1PrimePool.get(key);
     }
 
     public Integer[] getPi(Integer key){
@@ -122,4 +127,15 @@ public class PartyA implements PartyInterface {
     public BigInteger[] getUArray(Integer key){
         return UArrayPool.get(key);
     }
+
+    private BigInteger[] genRArray(int arraySize){
+        BigInteger[] rArray = new BigInteger[arraySize];
+        for(int i = 0; i< arraySize;i++){
+            BigInteger temp = new BigInteger(bitSize, srand);
+            rArray[i] = temp.multiply(twoToL);
+        }
+        return rArray;
+    }
+
+
 }
