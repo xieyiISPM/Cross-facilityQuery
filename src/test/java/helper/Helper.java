@@ -1,15 +1,14 @@
 package helper;
 
-import config.appConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.stereotype.Service;
 import paillier.PaillierPair;
 
 import java.math.BigInteger;
 
-@ContextConfiguration(classes={appConfiguration.class})
+@Service
 public class Helper {
 
     @Autowired
@@ -54,4 +53,5 @@ public class Helper {
 
         return targetArray;
     }
+
 }

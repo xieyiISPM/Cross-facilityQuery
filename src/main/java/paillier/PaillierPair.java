@@ -35,7 +35,7 @@ public class PaillierPair {
     }
 
     @PostConstruct
-    public void genKeyPair(){
+    private void genKeyPair(){
         logger.info("Generating Paillier private key, public key...");
         this.paillierPrivateKey = PaillierPrivateKey.create(paillierKeySize);
         this.paillierPublicKey = paillierPrivateKey.getPublicKey();

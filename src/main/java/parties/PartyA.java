@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import paillier.PaillierPair;
 
 import javax.annotation.PostConstruct;
@@ -15,8 +17,10 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class PartyA implements PartyInterface {
 
+    @Value("${party.bitSize}")
     private int bitSize;
 
     private Map<Integer, BigInteger[]> UArrayPool = new HashMap<>();
@@ -41,9 +45,13 @@ public class PartyA implements PartyInterface {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public PartyA(int bitSize){
-        this.bitSize = bitSize;
+    public PartyA(){
+    }
+
+    @PostConstruct
+    private void setup(){
         twoToL = BigInteger.TWO.pow(bitSize);
+
     }
 
     public PartyA(int bitSize, PaillierPublicKey pk){
@@ -117,6 +125,32 @@ public class PartyA implements PartyInterface {
     public BigInteger[] getL1Prime(BigInteger[] L0) {
         addToL1Pool(L0);
         return L1PrimePool.get(L0.length);
+    }
+
+    public BigInteger[] getL4Prime(BigInteger[] partyAHalf, BigInteger[] L3){
+        logger.info("Online phase of secure Shuffling starting for " + this.getClass() + " !");
+        if(partyAHalf==null || partyAHalf.length==0){
+            logger.error(this.getClass() +" party A input is null or empty!");
+            return null;
+        }
+        if(partyAHalf.length!=L3.length){
+            logger.error("Array size between L3 and party A's input do not match!");
+        }
+
+        if(!UArrayPool.containsKey(partyAHalf.length)){
+            logger.error("Can not retrieve related U array with size; " + partyAHalf.length + " " +
+                    " \n Make sure you have offline Secure shuffling first! ");
+            return null;
+        }
+
+        BigInteger[] uArray = UArrayPool.get(partyAHalf.length);
+        BigInteger[] L4 = new BigInteger[partyAHalf.length];
+        BigInteger[] L4Prime = new BigInteger[partyAHalf.length];
+        for(int i = 0; i< partyAHalf.length; i++){
+            L4[i] = (partyAHalf[i].add(uArray[i])).add(L3[i]).mod(twoToL);
+        }
+        L4Prime = sh.permRandomArray(L4,piPool.get(partyAHalf.length));
+        return L4Prime;
     }
 
     public Integer[] getPi(Integer key){

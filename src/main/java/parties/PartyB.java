@@ -6,15 +6,20 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import paillier.PaillierPair;
 
+import javax.annotation.PostConstruct;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class PartyB implements PartyInterface {
 
+    @Value("${party.bitSize}")
     private int bitSize;
 
     private Map<Integer, BigInteger[]> VArrayPool = new HashMap<>();
@@ -38,9 +43,11 @@ public class PartyB implements PartyInterface {
     public  PartyB(){
 
     }
-    public PartyB(int bitSize){
-        this.bitSize = bitSize;
+
+    @PostConstruct
+    private void setup(){
         twoToL = BigInteger.TWO.pow(bitSize);
+
     }
 
     public PaillierPublicKey distributePublicKey(){
@@ -56,6 +63,48 @@ public class PartyB implements PartyInterface {
     @Override
     public BigInteger[] getRandomArray(Integer key){
         return VArrayPool.get(key);
+    }
+
+
+
+    public BigInteger[] getL2(BigInteger[] partyAL1Prime){
+        addToL2Pool(partyAL1Prime);
+
+        return L2Pool.get(partyAL1Prime.length);
+    }
+
+    public BigInteger[] getL0(Integer key){
+        addToL0PooL(key);
+        return L0Pool.get(key);
+    }
+
+    public BigInteger[] getVArray(Integer key){
+        return VArrayPool.get(key);
+    }
+
+    public BigInteger[] getL3(BigInteger[] partyBHalf){
+        logger.info("Online phase of secure Shuffling starting for " + this.getClass() + " !");
+        if(partyBHalf==null || partyBHalf.length==0){
+            logger.error(this.getClass() +" party B input is null or empty!");
+            return null;
+        }
+
+        if(!VArrayPool.containsKey(partyBHalf.length)){
+            logger.error("Can not retrieve related v array with size; " + partyBHalf.length + " " +
+                    " \n Make sure you have offline Secure shuffling first! ");
+            return null;
+        }
+
+        BigInteger [] vArray = VArrayPool.get(partyBHalf.length);
+
+        BigInteger [] L3 = new BigInteger[partyBHalf.length];
+
+        int i = 0;
+        for(BigInteger x: partyBHalf){
+            L3[i] = x.add(VArrayPool.get(partyBHalf.length)[i]).mod(twoToL);
+            i++;
+        }
+        return L3;
     }
 
     private void addToL0PooL(int arraySize){
@@ -87,21 +136,6 @@ public class PartyB implements PartyInterface {
             L2[i] = (L2[i].mod(twoToL)).negate();
         }
         L2Pool.put(L1Prime.length, L2);
-    }
-
-    public BigInteger[] getL2(BigInteger[] partyAL1Prime){
-        addToL2Pool(partyAL1Prime);
-
-        return L2Pool.get(partyAL1Prime.length);
-    }
-
-    public BigInteger[] getL0(Integer key){
-        addToL0PooL(key);
-        return L0Pool.get(key);
-    }
-
-    public BigInteger[] getVArray(Integer key){
-        return VArrayPool.get(key);
     }
 
 
