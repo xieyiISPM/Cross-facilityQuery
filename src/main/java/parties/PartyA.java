@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import paillier.PaillierPair;
 
 import javax.annotation.PostConstruct;
@@ -28,6 +29,11 @@ public class PartyA implements PartyInterface {
     private Map<Integer, BigInteger[]> L1Pool = new HashMap<>();
     private Map<Integer, BigInteger[]> L1PrimePool = new HashMap<>();
     private Map<Integer, BigInteger[]> rArrayPool = new HashMap<>();
+
+    @Getter
+    private Map<Integer, BigInteger[]> L4PrimeArrayPool = new HashMap<>();
+
+
 
     @Autowired
     private SecureHelper sh;
@@ -129,17 +135,18 @@ public class PartyA implements PartyInterface {
 
     public BigInteger[] getL4Prime(BigInteger[] partyAHalf, BigInteger[] L3){
         logger.info("Online phase of secure Shuffling starting for " + this.getClass() + " !");
-        if(partyAHalf==null || partyAHalf.length==0){
-            logger.error(this.getClass() +" party A input is null or empty!");
-            return null;
-        }
+
+        Assert.notNull(partyAHalf, "party A 's input can not be null.");
+        Assert.notEmpty(partyAHalf, "Party A can not be empty.");
+        Assert.notNull(L3, "Array L3 can not be null");
+
         if(partyAHalf.length!=L3.length){
             logger.error("Array size between L3 and party A's input do not match!");
         }
 
         if(!UArrayPool.containsKey(partyAHalf.length)){
             logger.error("Can not retrieve related U array with size; " + partyAHalf.length + " " +
-                    " \n Make sure you have offline Secure shuffling first! ");
+                    " \n Make sure you have offline Secure protocols first! ");
             return null;
         }
 
@@ -150,6 +157,7 @@ public class PartyA implements PartyInterface {
             L4[i] = (partyAHalf[i].add(uArray[i])).add(L3[i]).mod(twoToL);
         }
         L4Prime = sh.permRandomArray(L4,piPool.get(partyAHalf.length));
+        L4PrimeArrayPool.put(partyAHalf.length, L4Prime);
         return L4Prime;
     }
 

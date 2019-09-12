@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import paillier.PaillierPair;
 
 import javax.annotation.PostConstruct;
@@ -84,14 +85,14 @@ public class PartyB implements PartyInterface {
 
     public BigInteger[] getL3(BigInteger[] partyBHalf){
         logger.info("Online phase of secure Shuffling starting for " + this.getClass() + " !");
-        if(partyBHalf==null || partyBHalf.length==0){
-            logger.error(this.getClass() +" party B input is null or empty!");
-            return null;
-        }
+
+        Assert.notNull(partyBHalf, "Party B's input is null!");
+        Assert.notEmpty(partyBHalf, "Party B has no elements inside");
+
 
         if(!VArrayPool.containsKey(partyBHalf.length)){
             logger.error("Can not retrieve related v array with size; " + partyBHalf.length + " " +
-                    " \n Make sure you have offline Secure shuffling first! ");
+                    " \n Make sure you have offline Secure protocols first! ");
             return null;
         }
 

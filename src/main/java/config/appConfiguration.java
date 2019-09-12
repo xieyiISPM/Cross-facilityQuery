@@ -10,7 +10,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import paillier.PaillierPair;
 
 @Configuration
-@ComponentScan(basePackages= {"shuffling", "parties"})
+@ComponentScan(basePackages= {"protocols", "parties"})
 @PropertySource(value={"classpath:application.properties"})
 public class appConfiguration {
 

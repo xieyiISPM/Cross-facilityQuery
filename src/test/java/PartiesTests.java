@@ -14,15 +14,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import paillier.PaillierPair;
 import parties.PartyA;
 import parties.PartyB;
-import shuffling.OfflineShuffling;
-import shuffling.OnlineShuffling;
+import protocols.OfflineShuffling;
+import protocols.OnlineShuffling;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes={appConfiguration.class, testConfiguration.class})
-@TestPropertySource(properties = {"party.arraySize=100", "party.bitSize = 10"})
+@TestPropertySource(locations = "classpath:application.properties")
+
 @ComponentScan(basePackages = "test")
 public class PartiesTests {
     @Autowired
@@ -34,7 +35,7 @@ public class PartiesTests {
     @Autowired
     private PartyB partyB;
 
-    @Value("${party.arraySize}")
+    @Value("${shuffle.arraySize}")
     private int arraySize;
 
     @Value("${party.bitSize}")
@@ -124,6 +125,7 @@ public class PartiesTests {
 
     @Test
     public void offlineAndOnlineCombining(){
+
         BigInteger[] L2 = offlineShuffling.getL2FromPartyB();
 
         Assert.assertNotNull(L2);
@@ -141,9 +143,9 @@ public class PartiesTests {
 
         BigInteger[] partyFullPrime = helper.permutedArrayOrder(partyFull,partyA.getPi(arraySize));
 
-
-        BigInteger[] L3  = onlineShuffling.generateL3ForPartyB(partyBHalf);
-        BigInteger[] L4 = onlineShuffling.generateL4ForParyA(partyAHalf);
+        onlineShuffling.onLineShuffling(partyBHalf, partyAHalf);
+        BigInteger[] L3  = onlineShuffling.getL3();
+        BigInteger[] L4 = onlineShuffling.getL4();
         Assert.assertNotNull(L4);
 
         BigInteger[] partyRecover = new BigInteger[arraySize];

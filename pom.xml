@@ -21,6 +21,7 @@
         <emilianobonassi.version>v2.0.0</emilianobonassi.version>
         <commons.lang3.version>3.9</commons.lang3.version>
         <slf4j.version>1.7.26</slf4j.version>
+        <google.guava.version>28.1-jre</google.guava.version>
     </properties>
 
     <parent>
@@ -92,7 +93,6 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${jupiter.engine.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -106,6 +106,18 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons.lang3.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>28.1-jre</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
 
 
