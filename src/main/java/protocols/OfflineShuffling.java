@@ -1,6 +1,7 @@
 package protocols;
 
 import com.google.common.base.Stopwatch;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,11 @@ public class OfflineShuffling {
     @Autowired
     private PartyA partyA;
 
+
     @Autowired
     private PartyB partyB;
 
+    @Setter
     @Value("${shuffle.arraySize}")
     private int arraySize;
 

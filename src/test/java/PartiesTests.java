@@ -1,3 +1,4 @@
+import aops.StopwatchAspect;
 import config.appConfiguration;
 import config.testConfiguration;
 import helper.Helper;
@@ -16,9 +17,11 @@ import parties.PartyA;
 import parties.PartyB;
 import protocols.OfflineShuffling;
 import protocols.OnlineShuffling;
+import protocols.SecureBranch;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Random;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes={appConfiguration.class, testConfiguration.class})
@@ -38,6 +41,9 @@ public class PartiesTests {
     @Value("${shuffle.arraySize}")
     private int arraySize;
 
+    @Value("${branch.arraySize}")
+    private int secureBranchArraySize;
+
     @Value("${party.bitSize}")
     private int bitSize;
 
@@ -52,6 +58,12 @@ public class PartiesTests {
 
     @Autowired
     private OfflineShuffling offlineShuffling;
+
+    @Autowired
+    private SecureBranch sb;
+
+    @Autowired
+    private StopwatchAspect sa;
 
     @Test
     public void simpleTest(){
@@ -125,6 +137,8 @@ public class PartiesTests {
 
     @Test
     public void offlineAndOnlineCombining(){
+        arraySize = new Random().nextInt(50);
+        offlineShuffling.setArraySize(arraySize);
 
         BigInteger[] L2 = offlineShuffling.getL2FromPartyB();
 
@@ -154,6 +168,42 @@ public class PartiesTests {
         }
 
         Assert.assertArrayEquals(partyFullPrime, partyRecover);
+
+    }
+
+    @Test
+    public void secureBranchTest(){
+        BigInteger[] xBHalf = sh.genRandomArray(secureBranchArraySize, new SecureRandom());
+        BigInteger[] xAHalf = sh.genRandomArray(secureBranchArraySize, new SecureRandom());
+
+        BigInteger[]yBHalf = sh.genRandomArray(secureBranchArraySize, new SecureRandom());
+        BigInteger[] yAHalf = sh.genRandomArray(secureBranchArraySize, new SecureRandom());
+
+        /*BigInteger[] xBHalf = {BigInteger.valueOf(5),BigInteger.valueOf(6)};
+        BigInteger[] xAHalf = {BigInteger.valueOf(3), BigInteger.valueOf(21)};*/
+
+        System.out.println("Reconstructed x[0] = "  + helper.reconstruct(xBHalf[0], xAHalf[0]));
+        System.out.println("Reconstructed x[1] = " +  helper.reconstruct(xBHalf[1], xAHalf[1]));
+
+        /*BigInteger[] yBHalf = {BigInteger.valueOf(4),BigInteger.valueOf(11)};
+        BigInteger[] yAHalf = {BigInteger.valueOf(2), BigInteger.valueOf(5)};*/
+
+       // System.out.println("y[0] y[1]");
+/*        helper.printList(yAHalf);
+        helper.printList(yBHalf);*/
+        System.out.println("Reconstructed y[0] = "  + helper.reconstruct(yBHalf[0], yAHalf[0]));
+        System.out.println("Reconstructed y[1] = " +  helper.reconstruct(yBHalf[1], yAHalf[1]));
+
+        sb.addAndCompare(xAHalf, xBHalf,yAHalf,yBHalf);
+        Assert.assertNotNull(sb.getYOutputA());
+        Assert.assertNotNull(sb.getYOutputB());
+/*        System.out.println(sb.getYOutputA());
+        System.out.println(sb.getYOutputB());*/
+
+        System.out.print("Shuffling order: ");
+        helper.printList(partyA.getPi(secureBranchArraySize));
+
+        System.out.println("Reconstructed y output: " +helper.reconstruct(sb.getYOutputA(), sb.getYOutputB()));
 
     }
 

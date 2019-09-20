@@ -34,6 +34,7 @@ public class OnlineShuffling {
 
     private void generateL3ForPartyB(BigInteger[] partyBHalf){
         logger.info("Generate L3 array!");
+        L3=null;
         Assert.isNull(L3, "L3 init should be null!");
         L3 = partyB.getL3(partyBHalf);
     }
@@ -41,6 +42,7 @@ public class OnlineShuffling {
     private void generateL4ForPartyA(BigInteger[] partyAHalf){
         logger.info("Generate L4' array!");
         Assert.notNull(L3, "L3 is null, you must let partyB generate L3 first...");
+        L4=null;
         Assert.isNull(L4, "L4 init should be null!");
         L4 =  partyA.getL4Prime(partyAHalf, L3);
     }

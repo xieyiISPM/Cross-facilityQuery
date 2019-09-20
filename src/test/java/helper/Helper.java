@@ -3,18 +3,31 @@ package helper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import paillier.PaillierPair;
 
+import javax.annotation.PostConstruct;
 import java.math.BigInteger;
 
 @Service
 public class Helper {
 
+    @Value("${party.bitSize}")
+    private int bitSize;
+
+    private BigInteger twoToL;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private  PaillierPair paillierPair;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @PostConstruct
+    private void init(){
+         twoToL = BigInteger.TWO.pow(bitSize);
+    }
+
 
     public void printList(BigInteger[] list){
         for (BigInteger item: list){
@@ -52,6 +65,10 @@ public class Helper {
         }
 
         return targetArray;
+    }
+
+    public BigInteger reconstruct(BigInteger a, BigInteger b){
+        return (a.add(b)).mod(twoToL);
     }
 
 }
