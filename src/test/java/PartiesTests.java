@@ -18,6 +18,7 @@ import parties.PartyB;
 import protocols.OfflineShuffling;
 import protocols.OnlineShuffling;
 import protocols.SecureBranch;
+import protocols.SecureMinimumSelection;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -61,6 +62,9 @@ public class PartiesTests {
 
     @Autowired
     private SecureBranch sb;
+
+    @Autowired
+    private SecureMinimumSelection sms;
 
     @Autowired
     private StopwatchAspect sa;
@@ -204,6 +208,31 @@ public class PartiesTests {
         helper.printList(partyA.getPi(secureBranchArraySize));
 
         System.out.println("Reconstructed y output: " +helper.reconstruct(sb.getYOutputA(), sb.getYOutputB()));
+
+    }
+
+    @Test
+    public void secureMinimumSelectionTest() {
+        BigInteger[] xBHalf = sh.genRandomArray(arraySize, new SecureRandom());
+        BigInteger[] xAHalf = sh.genRandomArray(arraySize, new SecureRandom());
+
+        /*BigInteger[] xBHalf = {BigInteger.valueOf(5),BigInteger.valueOf(6)};
+        BigInteger[] xAHalf = {BigInteger.valueOf(3), BigInteger.valueOf(21)};*/
+
+        System.out.println("Reconstructed x:");
+        for (int i = 0; i < arraySize; i++){
+            System.out.print(helper.reconstruct(xBHalf[i], xAHalf[i]) + " ");
+        }
+        System.out.println();
+
+        sms.getMini(xAHalf, xBHalf);
+        Assert.assertNotNull(sms.getXMinA());
+        Assert.assertNotNull(sms.getXMinB());
+
+        System.out.print("Shuffling order: ");
+        helper.printList(partyA.getPi(arraySize));
+
+        System.out.println("Reconstructed minimum output: " +helper.reconstruct(sms.getXMinA(), sms.getXMinB()));
 
     }
 
