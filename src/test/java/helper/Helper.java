@@ -43,6 +43,21 @@ public class Helper {
         System.out.println();
     }
 
+    public void print2DArray(BigInteger[][] distance){
+        int n1 = distance.length ;
+        int n2 = distance[0].length;
+
+        for(int i = 0; i< n1;i++){
+            for(int j= 0; j< n2; j++){
+                System.out.print(distance[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.print("distance = ");
+        System.out.println(distance[n1-1][n2-1]);
+    }
+
+
     public BigInteger[] getDecryptedArray(BigInteger[] list, BigInteger twoToL){
         int arraySize = list.length;
         BigInteger[] decryptedList = new BigInteger[arraySize];
@@ -69,6 +84,21 @@ public class Helper {
 
     public BigInteger reconstruct(BigInteger a, BigInteger b){
         return (a.add(b)).mod(twoToL);
+    }
+
+    public BigInteger[] reconstruct(BigInteger[] aHalf, BigInteger[] bHalf){
+        if(aHalf.length != bHalf.length){
+            logger.error(aHalf.getClass() + " and " + bHalf.getClass() + " array length does not match. Reconstruction failed!");
+            return null;
+        }
+
+        int arraySize = aHalf.length;
+
+        BigInteger[] full = new BigInteger[arraySize];
+        for (int i = 0; i< arraySize; i++){
+            full[i] = reconstruct(aHalf[i], bHalf[i]);
+        }
+        return full;
     }
 
 }

@@ -1,7 +1,10 @@
 import config.appConfiguration;
-import config.testConfiguration;
+import config.TestConfiguration;
+import helper.Helper;
+import helper.WagnerFisher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -11,11 +14,18 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes={appConfiguration.class, testConfiguration.class})
+@ContextConfiguration(classes={appConfiguration.class, TestConfiguration.class})
 @TestPropertySource(locations = "classpath:application.properties")
 
 @ComponentScan(basePackages = "test")
 public class WagnerFisherTest {
+
+    @Autowired
+    private WagnerFisher wagnerFisher;
+
+    @Autowired
+    private Helper helper;
+
     @Test
     public void testWagnerFisher(){
 
@@ -31,20 +41,20 @@ public class WagnerFisherTest {
         reconstructed dED = 2
 */
 
-        /*String strX = "abreitsjour";
-        String strY = "arbeitsjournal";
+        String strX = "CTAGA";
+        String strY = "ATGAATKTKKJKJKJ";
         char[] charX = strX.toCharArray();
         char[] charY = strY.toCharArray();
         BigInteger[] x  = new BigInteger[charX.length];
         BigInteger[] y = new BigInteger[charY.length];
         int n1 = charX.length ;
-        int n2 = charY.length;*/
-        int[] charX = {4, 9, 28, 20, 14, 11, 5, 1, 31, 22, 18, 21, 11, 28, 31, 21, 10, 5, 16, 17, 5, 4, 25};
+        int n2 = charY.length;
+        /*int[] charX = {4, 9, 28, 20, 14, 11, 5, 1, 31, 22, 18, 21, 11, 28, 31, 21, 10, 5, 16, 17, 5, 4, 25};
         int[] charY ={18, 15, 5, 4, 26, 18, 15, 30, 27, 9, 9, 17, 5, 14, 27, 10, 30, 11, 10, 24, 24, 23, 19};
         BigInteger[] x  = new BigInteger[charX.length];
         BigInteger[] y = new BigInteger[charY.length];
         int n1 = charX.length ;
-        int n2 = charY.length;
+        int n2 = charY.length;*/
 
 
         for (int i = 0; i< n1; i++){
@@ -54,38 +64,9 @@ public class WagnerFisherTest {
             y[i] = BigInteger.valueOf(charY[i]);
         }
 
+        BigInteger[][] editDistance = wagnerFisher.getEditDistance(x, y);
+        helper.print2DArray(editDistance);
 
-        BigInteger[][] distance = new BigInteger[n1 + 1][n2 +1];
-
-        for(int i =0; i<=n1; i++){
-            distance[i][0]= BigInteger.valueOf(i);
-        }
-        for(int j = 0; j<=n2; j++ ){
-            distance[0][j] = BigInteger.valueOf(j);
-        }
-        BigInteger cDel = BigInteger.ONE;
-        BigInteger cIns = BigInteger.ONE;
-        BigInteger cSub;
-        for (int i = 1; i<=n1; i++ ){
-            for(int j= 1; j <=n2; j++){
-                if(x[i-1].compareTo(y[j-1])==0){
-                    cSub = BigInteger.ZERO;
-                }
-                else {
-                    cSub = BigInteger.ONE;
-                }
-                distance[i][j] = min(distance[i-1][j].add(cDel), distance[i][j-1].add(cIns),distance[i-1][j-1].add(cSub));
-            }
-        }
-
-        for(int i = 0; i<= n1;i++){
-            for(int j= 0; j<= n2; j++){
-                System.out.print(distance[i][j] + " ");
-            }
-            System.out.println();
-        }
-        System.out.print("distance = ");
-        System.out.println(distance[n1][n2]);
     }
 
     private BigInteger min(BigInteger big1, BigInteger big2, BigInteger big3){

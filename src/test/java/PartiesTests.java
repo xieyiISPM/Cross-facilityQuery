@@ -1,6 +1,5 @@
 import aops.StopwatchAspect;
-import config.appConfiguration;
-import config.testConfiguration;
+import config.TestConfiguration;
 import helper.Helper;
 import helper.SecureHelper;
 import org.junit.Assert;
@@ -15,17 +14,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import paillier.PaillierPair;
 import parties.PartyA;
 import parties.PartyB;
-import protocols.OfflineShuffling;
-import protocols.OnlineShuffling;
-import protocols.SecureBranch;
-import protocols.SecureMinimumSelection;
+import protocols.*;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Random;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes={appConfiguration.class, testConfiguration.class})
+@ContextConfiguration(classes={TestConfiguration.class})
 @TestPropertySource(locations = "classpath:application.properties")
 
 @ComponentScan(basePackages = "test")
@@ -68,6 +64,9 @@ public class PartiesTests {
 
     @Autowired
     private StopwatchAspect sa;
+
+    @Autowired
+    private SecureExactEditDistance seed;
 
     @Test
     public void simpleTest(){
@@ -233,6 +232,21 @@ public class PartiesTests {
         helper.printList(partyA.getPi(arraySize));
 
         System.out.println("Reconstructed minimum output: " +helper.reconstruct(sms.getXMinA(), sms.getXMinB()));
+
+    }
+
+    @Test
+    public void secureExactEditDistanceTest(){
+        BigInteger[] xBHalf = sh.genRandomArray(arraySize, new SecureRandom());
+        BigInteger[] xAHalf = sh.genRandomArray(arraySize, new SecureRandom());
+
+        BigInteger[]yBHalf = sh.genRandomArray(arraySize, new SecureRandom());
+        BigInteger[] yAHalf = sh.genRandomArray(arraySize, new SecureRandom());
+
+        BigInteger[] xFull = helper.reconstruct(xAHalf, xBHalf);
+        BigInteger[] yFull = helper.reconstruct(yAHalf, yBHalf);
+
+
 
     }
 
