@@ -1,6 +1,8 @@
 package protocols;
 
 
+import aops.LogExecutionTime;
+import com.google.common.base.Stopwatch;
 import helper.GeneralHelper;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.math.BigInteger;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SecureExactEditDistance {
@@ -33,8 +36,6 @@ public class SecureExactEditDistance {
     @Autowired
     private SecureMinimumSelection sms;
 
-    @Autowired
-    private OfflineShuffling offlineShuffling;
 
 
     public SecureExactEditDistance(){
@@ -46,7 +47,10 @@ public class SecureExactEditDistance {
         twoToL = BigInteger.TWO.pow(bitSize);
     }
 
+    @LogExecutionTime
     public void  getExactEditDistance(BigInteger[] xA, BigInteger[] xB, BigInteger[] yA, BigInteger[]yB){
+        Stopwatch stopwatch = Stopwatch.createStarted();
+
         if (xA.length != xB.length || yA.length != yB.length){
             logger.error("X Half or Y Half array size does not much!");
             throw new IllegalArgumentException("Secure Edit Distance input array error."); // shared sequence between two parties has to be match
@@ -86,11 +90,11 @@ public class SecureExactEditDistance {
 
         for (int i = 1; i<= n1; i++){
             for(int j=1; j<=n2; j++){
-                BigInteger t1A = yA[i-1].add(BigInteger.ONE).mod(twoToL);
-                BigInteger t1B = yB[i-1];
+                BigInteger t1A = yA[j-1].add(BigInteger.ONE).mod(twoToL);
+                BigInteger t1B = yB[j-1];
 
-                BigInteger t2A = yA[i-1].subtract(BigInteger.ONE).mod(twoToL);
-                BigInteger t2B = yB[i-1];
+                BigInteger t2A = yA[j-1].subtract(BigInteger.ONE).mod(twoToL);
+                BigInteger t2B = yB[j-1];
 
                 sb.addAndCompare(GeneralHelper.genArray(t1A,xA[i-1]),GeneralHelper.genArray(t1B,xB[i-1]), GeneralHelper.genArray(z0A, z1A), GeneralHelper.genArray(z0B, z1B));
                 BigInteger t3A = sb.getYOutputA();
@@ -100,19 +104,6 @@ public class SecureExactEditDistance {
                 BigInteger cSubA = sb.getYOutputA();
                 BigInteger cSubB = sb.getYOutputB();
 
-                /*Helper<BigInteger> helper = new Helper<>(bitSize);
-                BigInteger reconstructedX = helper.reconstruct(xA[i-1], xB[i-1], bitSize);
-                BigInteger reconstructedY = helper.reconstruct(yA[i-1],yB[i-1],bitSize);
-                BigInteger cSubA;
-                BigInteger cSubB;
-                if(reconstructedX.compareTo(reconstructedY)==0){
-                    cSubA = BigInteger.ZERO;
-                    cSubB = BigInteger.ZERO;
-                }
-                else{
-                    cSubA = BigInteger.ZERO;
-                    cSubB  = BigInteger.ONE;
-                }*/
 
                 BigInteger term1A =  deltaA[i-1][j].add(cDelA).mod(twoToL);
                 BigInteger term1B =  deltaB[i-1][j].add(cDelB).mod(twoToL);
@@ -132,8 +123,11 @@ public class SecureExactEditDistance {
             }
         }
         dEDA = deltaA[n1][n2];
-        dEDB = deltaB[n2][n2];
-    }
+        dEDB = deltaB[n1][n2];
 
+        stopwatch.stop();
+        long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+        logger.info("======== SecureEditDistance protocols cost time: " + mills + " ms n1 = " + n1 + " n2 = " + n2 + " ==========");
+    }
 
 }

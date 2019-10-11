@@ -1,6 +1,7 @@
 package protocols;
 
 import aops.LogExecutionTime;
+import com.google.common.base.Stopwatch;
 import helper.GeneralHelper;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.math.BigInteger;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SecureBranch {
@@ -43,6 +45,7 @@ public class SecureBranch {
 
     @LogExecutionTime
     public void addAndCompare(BigInteger[] xA, BigInteger[]xB, BigInteger[] yA, BigInteger[]yB){
+        Stopwatch stopwatch = Stopwatch.createStarted();
         if(xA.length != xB.length || yA.length!= yB.length || xA.length != yA.length || xA.length != 2){
             logger.error("X and Y must be size of 2.");
             new ArrayIndexOutOfBoundsException("Secure branch compare input array error.");
@@ -69,6 +72,10 @@ public class SecureBranch {
             yOutputA = yAPrime[1];
             yOutputB = yBPrime[1];
         }
+
+        stopwatch.stop();
+        long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+        logger.info("======== SecureBranch protocols cost time: " + mills + " ms arraySize= " + branchArraySize + " ==========");
     }
 
 }

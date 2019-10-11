@@ -1,5 +1,6 @@
 package protocols;
 
+import com.google.common.base.Stopwatch;
 import helper.GeneralHelper;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.math.BigInteger;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SecureMinimumSelection{
@@ -47,6 +49,7 @@ public class SecureMinimumSelection{
     }
 
     public void getMini(BigInteger[] xA, BigInteger[] xB){
+        Stopwatch stopwatch = Stopwatch.createStarted();
         if(xA.length != xB.length){
             logger.error("X and Y array size does not much!");
             new ArrayIndexOutOfBoundsException("Secure Minimum Selection input array error.");
@@ -72,6 +75,10 @@ public class SecureMinimumSelection{
         }
         xMinA = xDeltaA;
         xMinB = xDeltaB;
+
+        stopwatch.stop();
+        long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+        logger.info("======== SecureMinimumSelection protocols cost time: " + mills + " ms arraySize= " + minimumSelectionArraySize + " ==========");
     }
 
 

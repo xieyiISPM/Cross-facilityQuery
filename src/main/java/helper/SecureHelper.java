@@ -29,6 +29,22 @@ public class SecureHelper {
         return randArray;
     }
 
+    public BigInteger[] getFirstHalf(int fullLength, SecureRandom srand){
+        BigInteger[] firstHalf = new BigInteger[fullLength];
+        for (int i = 0; i < fullLength; i++) {
+            firstHalf[i] = new BigInteger(bitSize, srand);
+        }
+        return firstHalf;
+    }
+
+    public BigInteger[] getSecondHalf(BigInteger[] full, BigInteger[] firstHalf){
+        BigInteger[] secondHalf = new BigInteger[firstHalf.length];
+        for(int i = 0; i< firstHalf.length; i++){
+            secondHalf[i] = full[i].subtract(firstHalf[i]).mod(twoToL);
+        }
+        return secondHalf;
+    }
+
     /**
      * Generate pi function : Create a random permutation of the given size;
      * @param arrSize array size

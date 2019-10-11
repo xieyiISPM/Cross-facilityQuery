@@ -101,4 +101,15 @@ public class Helper {
         return full;
     }
 
+    public BigInteger[] strToBigInt(String str){
+        char[] chars = str.toCharArray();
+        BigInteger[] array = new BigInteger[chars.length];
+
+        for(int i =0; i < chars.length; i++){
+            array[i] =BigInteger.valueOf(chars[i]);
+        }
+
+        return array;
+    }
+
 }

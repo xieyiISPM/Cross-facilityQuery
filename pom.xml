@@ -22,6 +22,7 @@
         <commons.lang3.version>3.9</commons.lang3.version>
         <slf4j.version>1.7.26</slf4j.version>
         <google.guava.version>28.1-jre</google.guava.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <parent>
@@ -118,11 +119,13 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>28.1-jre</version>
+            <version>${google.guava.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
 

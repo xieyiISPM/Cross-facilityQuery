@@ -2,12 +2,16 @@ import aops.StopwatchAspect;
 import config.TestConfiguration;
 import helper.Helper;
 import helper.SecureHelper;
+import helper.WagnerFisher;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -67,6 +71,9 @@ public class PartiesTests {
 
     @Autowired
     private SecureExactEditDistance seed;
+
+    @Autowired
+    private WagnerFisher wagnerFisher;
 
     @Test
     public void simpleTest(){
@@ -235,18 +242,60 @@ public class PartiesTests {
 
     }
 
+
     @Test
     public void secureExactEditDistanceTest(){
-        BigInteger[] xBHalf = sh.genRandomArray(arraySize, new SecureRandom());
-        BigInteger[] xAHalf = sh.genRandomArray(arraySize, new SecureRandom());
 
-        BigInteger[]yBHalf = sh.genRandomArray(arraySize, new SecureRandom());
-        BigInteger[] yAHalf = sh.genRandomArray(arraySize, new SecureRandom());
+       int xLength = 15;
+       int yLength = 30;
+
+        String strX = RandomStringUtils.randomAlphabetic(xLength).toUpperCase();
+        System.out.println(strX);
+        String strY = RandomStringUtils.randomAlphabetic(yLength).toUpperCase();
+        System.out.println(strY);
+
+        BigInteger[] x  = helper.strToBigInt(strX);
+        BigInteger[] y = helper.strToBigInt(strY);
+
+        /*System.out.println("x original array:");
+        helper.printList(x);
+        System.out.println("y original array");
+        helper.printList(y);*/
+
+        SecureRandom srand = new SecureRandom();
+
+        BigInteger[] xAHalf = sh.getFirstHalf(x.length, srand);
+        BigInteger[] xBHalf = sh.getSecondHalf(x, xAHalf);
+
+        BigInteger[] yAHalf = sh.getFirstHalf(y.length, srand);
+        BigInteger[] yBHalf = sh.getSecondHalf(y, yAHalf);
 
         BigInteger[] xFull = helper.reconstruct(xAHalf, xBHalf);
         BigInteger[] yFull = helper.reconstruct(yAHalf, yBHalf);
 
+        /*System.out.println("x reconstructed array:");
+        helper.printList(xFull);
+        System.out.println("y reconstructed array");
+        helper.printList(yFull);
+        System.out.println();*/
 
+        Assert.assertArrayEquals(x, xFull);
+        Assert.assertArrayEquals(y, yFull);
+
+
+        BigInteger[][] editDistance = wagnerFisher.getEditDistance(xFull,yFull);
+        //helper.print2DArray(editDistance);
+
+        int n1 = editDistance.length;
+        int n2 = editDistance[0].length;
+
+        seed.getExactEditDistance(xAHalf, xBHalf, yAHalf, yBHalf);
+        BigInteger dEDA = seed.getDEDA();
+        BigInteger dEBB = seed.getDEDB();
+
+       // System.out.println("Reconstructed edit distance: " + helper.reconstruct(dEDA, dEBB));
+
+        Assert.assertEquals(editDistance[n1 -1 ][n2 -1 ], helper.reconstruct(dEDA, dEBB));
 
     }
 
