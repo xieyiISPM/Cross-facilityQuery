@@ -247,7 +247,7 @@ public class PartiesTests {
     public void secureExactEditDistanceTest(){
 
        int xLength = 15;
-       int yLength = 30;
+       int yLength = 10;
 
         String strX = RandomStringUtils.randomAlphabetic(xLength).toUpperCase();
         System.out.println(strX);
