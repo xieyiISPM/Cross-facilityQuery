@@ -9,6 +9,7 @@ import java.util.Arrays;
 public class SecureHelper {
     int bitSize;
     BigInteger twoToL;
+
     public SecureHelper(int bitSize){
         this.bitSize = bitSize;
         twoToL = BigInteger.TWO.pow(bitSize);
@@ -87,4 +88,5 @@ public class SecureHelper {
         }
         return rArray;
     }
+
 }

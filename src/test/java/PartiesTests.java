@@ -27,7 +27,6 @@ import java.util.Random;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes={TestConfiguration.class})
 @TestPropertySource(locations = "classpath:application.properties")
-
 @ComponentScan(basePackages = "test")
 public class PartiesTests {
     @Autowired
@@ -298,6 +297,8 @@ public class PartiesTests {
         Assert.assertEquals(editDistance[n1 -1 ][n2 -1 ], helper.reconstruct(dEDA, dEBB));
 
     }
+
+
 
 
 }
