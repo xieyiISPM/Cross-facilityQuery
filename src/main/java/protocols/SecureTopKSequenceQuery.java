@@ -123,7 +123,7 @@ public class SecureTopKSequenceQuery {
     }
 
     public void genTopKIndexDistTuple(int k){
-        Assert.state(k<m,"Top k where k must smaller than array size" + m );
+        Assert.state(k<=m,"Top k where k must smaller than array size" + m );
 
         deltaA = new BigInteger[m][2]; //index 0 save index, index 1 save distance
         deltaB = new BigInteger[m][2];

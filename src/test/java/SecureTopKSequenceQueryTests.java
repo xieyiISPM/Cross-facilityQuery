@@ -28,7 +28,7 @@ public class SecureTopKSequenceQueryTests {
     private Helper helper;
 
     @Autowired
-    private SecureTopKSequenceQuery stsq;
+    private SecureTopKSequenceQuery secureTopKSequenceQuery;
 
     @Value("${genomic.records}")
     int records;
@@ -48,12 +48,58 @@ public class SecureTopKSequenceQueryTests {
 
     @Test
     public void secureQueryPreCompute(){
-        stsq.secureQueryPreCompute(queryA, genomicSequenceA,queryB,genomicSequenceB);
-        Assert.assertNotNull(stsq.getIndexDistTupleA());
-        Assert.assertNotNull(stsq.getIndexDistTupleB());
+        secureTopKSequenceQuery.secureQueryPreCompute(queryA, genomicSequenceA,queryB,genomicSequenceB);
+        Assert.assertNotNull(secureTopKSequenceQuery.getIndexDistTupleA());
+        Assert.assertNotNull(secureTopKSequenceQuery.getIndexDistTupleB());
 
-        System.out.println(stsq.getIndexDistTupleA()[0].getLeft());
-        System.out.println(stsq.getIndexDistTupleA()[0].getRight());
+       /* System.out.println(secureTopKSequenceQuery.getIndexDistTupleA()[0].getLeft());
+        System.out.println(secureTopKSequenceQuery.getIndexDistTupleA()[0].getRight());*/
 
+        System.out.println("Index reconstructing:");
+        for(int i=0;i < records; i++){
+            System.out.print(helper.reconstruct(secureTopKSequenceQuery.getIndexDistTupleA()[i].getLeft(), secureTopKSequenceQuery.getIndexDistTupleB()[i].getLeft()) + " ");
+        }
+        System.out.println();
+
+        System.out.println("distance reconstructing:");
+        for(int i=0;i < records; i++){
+            System.out.print(helper.reconstruct(secureTopKSequenceQuery.getIndexDistTupleA()[i].getRight(), secureTopKSequenceQuery.getIndexDistTupleB()[i].getRight()) + " ");
+        }
+        System.out.println();
+
+    }
+
+    @Test
+    public void setSecureTopKSequenceQuery(){
+        int k = 3;
+        secureTopKSequenceQuery.secureQueryPreCompute(queryA, genomicSequenceA,queryB,genomicSequenceB);
+        secureTopKSequenceQuery.genTopKIndexDistTuple(k);
+        Assert.assertNotNull(secureTopKSequenceQuery.getTopKIndexDistTupleA());
+        Assert.assertNotNull(secureTopKSequenceQuery.getTopKIndexDistTupleB());
+
+        System.out.println("Index reconstructing:");
+        for(int i=0;i < records; i++){
+            System.out.print(helper.reconstruct(secureTopKSequenceQuery.getIndexDistTupleA()[i].getLeft(), secureTopKSequenceQuery.getIndexDistTupleB()[i].getLeft()) + " ");
+        }
+        System.out.println();
+
+        System.out.println("distance reconstructing:");
+        for(int i=0;i < records; i++){
+            System.out.print(helper.reconstruct(secureTopKSequenceQuery.getIndexDistTupleA()[i].getRight(), secureTopKSequenceQuery.getIndexDistTupleB()[i].getRight()) + " ");
+        }
+        System.out.println();
+
+
+        System.out.println("Top " + k + " index");
+        for(int i=0;i <k; i++){
+            System.out.print(helper.reconstruct(secureTopKSequenceQuery.getTopKIndexDistTupleA()[i].getLeft(), secureTopKSequenceQuery.getTopKIndexDistTupleB()[i].getLeft()) + " ");
+        }
+        System.out.println();
+
+        System.out.println("Top " + k + " distance");
+        for(int i=0;i <k; i++){
+            System.out.print(helper.reconstruct(secureTopKSequenceQuery.getTopKIndexDistTupleA()[i].getRight(), secureTopKSequenceQuery.getTopKIndexDistTupleB()[i].getRight()) + " ");
+        }
+        System.out.println();
     }
 }
