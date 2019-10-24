@@ -75,7 +75,7 @@ public class SecureTopKSequenceQuery {
      * @param QB
      * @param SB
      */
-    public void secureQueryPreCompute(BigInteger[]QA,BigInteger[][] SA, BigInteger[] QB, BigInteger[][] SB){
+    private void secureQueryPreCompute(BigInteger[]QA,BigInteger[][] SA, BigInteger[] QB, BigInteger[][] SB){
 
         if(QA.length !=QB.length || SA.length != SB.length || SA[0].length !=SB[0].length){
             logger.error("QA, QB or SA, SB array size does not much!");
@@ -122,7 +122,8 @@ public class SecureTopKSequenceQuery {
         }
     }
 
-    public void genTopKIndexDistTuple(int k){
+    public void genTopKIndexDistTuple(BigInteger[]QA,BigInteger[][] SA, BigInteger[] QB, BigInteger[][] SB, int k){
+        secureQueryPreCompute(QA, SA, QB, SB);
         Assert.state(k<=m,"Top k where k must smaller than array size" + m );
 
         deltaA = new BigInteger[m][2]; //index 0 save index, index 1 save distance

@@ -46,34 +46,14 @@ public class SecureTopKSequenceQueryTests {
         genomicSequenceB = gsHelper.getGSB();
     }
 
-    @Test
-    public void secureQueryPreCompute(){
-        secureTopKSequenceQuery.secureQueryPreCompute(queryA, genomicSequenceA,queryB,genomicSequenceB);
-        Assert.assertNotNull(secureTopKSequenceQuery.getIndexDistTupleA());
-        Assert.assertNotNull(secureTopKSequenceQuery.getIndexDistTupleB());
-
-       /* System.out.println(secureTopKSequenceQuery.getIndexDistTupleA()[0].getLeft());
-        System.out.println(secureTopKSequenceQuery.getIndexDistTupleA()[0].getRight());*/
-
-        System.out.println("Index reconstructing:");
-        for(int i=0;i < records; i++){
-            System.out.print(helper.reconstruct(secureTopKSequenceQuery.getIndexDistTupleA()[i].getLeft(), secureTopKSequenceQuery.getIndexDistTupleB()[i].getLeft()) + " ");
-        }
-        System.out.println();
-
-        System.out.println("distance reconstructing:");
-        for(int i=0;i < records; i++){
-            System.out.print(helper.reconstruct(secureTopKSequenceQuery.getIndexDistTupleA()[i].getRight(), secureTopKSequenceQuery.getIndexDistTupleB()[i].getRight()) + " ");
-        }
-        System.out.println();
-
-    }
 
     @Test
     public void setSecureTopKSequenceQuery(){
         int k = 3;
-        secureTopKSequenceQuery.secureQueryPreCompute(queryA, genomicSequenceA,queryB,genomicSequenceB);
-        secureTopKSequenceQuery.genTopKIndexDistTuple(k);
+        secureTopKSequenceQuery.genTopKIndexDistTuple(queryA, genomicSequenceA,queryB,genomicSequenceB, k);
+
+        Assert.assertNotNull(secureTopKSequenceQuery.getIndexDistTupleA());
+        Assert.assertNotNull(secureTopKSequenceQuery.getIndexDistTupleB());
         Assert.assertNotNull(secureTopKSequenceQuery.getTopKIndexDistTupleA());
         Assert.assertNotNull(secureTopKSequenceQuery.getTopKIndexDistTupleB());
 
