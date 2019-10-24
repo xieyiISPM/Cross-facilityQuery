@@ -34,7 +34,7 @@ public class SecureCompareTests {
 
     private int startValue = 0;
 
-    private long totalTestRound = 5;
+    private long totalTestRound = 1;
 
     @Before
     public void init(){

@@ -1,5 +1,6 @@
 package protocols;
 
+import aops.LogExecutionTime;
 import com.google.common.base.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +34,10 @@ public class SecureCompare {
         twoToL = BigInteger.TWO.pow(bitSize);
     }
 
+    @LogExecutionTime
     public int secureComparing(BigInteger distHa, BigInteger distCa, BigInteger distHb, BigInteger distCb){
-        logger.info("Secure Comparing is Starting.....");
-        Stopwatch stopwatch = Stopwatch.createStarted();
+       /* logger.info("Secure Comparing is Starting.....");
+        Stopwatch stopwatch = Stopwatch.createStarted();*/
         int testTimes = 3;
         BigInteger[] r = new BigInteger[testTimes];
         int[] result = new int[testTimes];
@@ -57,11 +59,11 @@ public class SecureCompare {
         for(int i = 0; i < testTimes; i++){
             voteResult = result[i] + voteResult;
         }
-
+/*
         stopwatch.stop();
         long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
 
-        logger.info("======== SecureCompare protocols cost time: " + mills + " milliseconds ==========");
+        logger.info("======== SecureCompare protocols cost time: " + mills + " milliseconds ==========");*/
 
         if (voteResult > 0 ){
             return 1;

@@ -47,7 +47,6 @@ public class SecureExactEditDistance {
         twoToL = BigInteger.TWO.pow(bitSize);
     }
 
-    @LogExecutionTime
     public void  getExactEditDistance(BigInteger[] xA, BigInteger[] xB, BigInteger[] yA, BigInteger[]yB){
         Stopwatch stopwatch = Stopwatch.createStarted();
 

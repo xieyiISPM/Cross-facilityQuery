@@ -1,16 +1,13 @@
 package config;
 
-import helper.GeneralHelper;
 import helper.SecureHelper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import paillier.PaillierPair;
 
 @Configuration
+@EnableAspectJAutoProxy
 @ComponentScan(basePackages= {"protocols", "parties", "aops"})
 @PropertySource(value={"classpath:application.properties"})
 public class appConfiguration {

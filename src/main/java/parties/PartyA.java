@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import paillier.PaillierPair;
 
@@ -18,10 +16,10 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+
 public class PartyA implements PartyInterface {
 
-    @Value("${party.bitSize}")
+    @Setter
     private int bitSize;
 
     private Map<Integer, BigInteger[]> UArrayPool = new HashMap<>();
@@ -35,10 +33,10 @@ public class PartyA implements PartyInterface {
 
 
 
-    @Autowired
-    private SecureHelper sh;
+    @Setter
+    private SecureHelper secureHelper;
 
-    @Autowired
+    @Setter
     private PaillierPair paillierPair;
 
     @Setter
@@ -54,29 +52,29 @@ public class PartyA implements PartyInterface {
     public PartyA(){
     }
 
-    @PostConstruct
-    private void setup(){
+
+    public void setupTwoToL(){
         twoToL = BigInteger.TWO.pow(bitSize);
 
     }
 
-    public PartyA(int bitSize, PaillierPublicKey pk){
+/*    public PartyA(int bitSize, PaillierPublicKey pk){
         this.bitSize = bitSize;
         this.pk = pk;
         twoToL = BigInteger.TWO.pow(bitSize);
 
-    }
+    }*/
 
-    @PostConstruct
-    private void setPublicKey(){
+
+    public void setPublicKey(){
         pk = paillierPair.getPaillierPublicKey();
     }
 
 
     @Override
     public void addToRandomArrayPool(Integer arrSize){
-            UArrayPool.put(arrSize, sh.genRandomArray(arrSize, srand));
-            piPool.put(arrSize, sh.genPi(arrSize));
+            UArrayPool.put(arrSize, secureHelper.genRandomArray(arrSize, srand));
+            piPool.put(arrSize, secureHelper.genPi(arrSize));
     }
 
     @Override
@@ -114,7 +112,7 @@ public class PartyA implements PartyInterface {
 
         L1Pool.put(arraySize,L1);
         if(!piPool.containsKey(arraySize)){
-            piPool.put(arraySize,sh.genPi(arraySize));
+            piPool.put(arraySize, secureHelper.genPi(arraySize));
             logger.warn(this.getClass()+" piPool add "+ arraySize + " key");
 
         }
@@ -122,7 +120,7 @@ public class PartyA implements PartyInterface {
             logger.info(this.getClass()+" piPool has "+ arraySize + " key");
         }
         Integer[] pi = piPool.get(arraySize);
-        L1PrimePool.put(arraySize,sh.permRandomArray(L1,pi));
+        L1PrimePool.put(arraySize, secureHelper.permRandomArray(L1,pi));
     }
 
     public BigInteger[] getL1(Integer key){
@@ -156,7 +154,7 @@ public class PartyA implements PartyInterface {
         for(int i = 0; i< partyAHalf.length; i++){
             L4[i] = (partyAHalf[i].add(uArray[i])).add(L3[i]).mod(twoToL);
         }
-        L4Prime = sh.permRandomArray(L4,piPool.get(partyAHalf.length));
+        L4Prime = secureHelper.permRandomArray(L4,piPool.get(partyAHalf.length));
         L4PrimeArrayPool.put(partyAHalf.length, L4Prime);
         return L4Prime;
     }

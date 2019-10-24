@@ -11,6 +11,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import parties.PartyA;
+import parties.PartyB;
+import parties.PartyFactory;
+import protocols.OfflineShuffling;
+import protocols.OnlineShuffling;
 import protocols.SecureTopKSequenceQuery;
 
 import java.math.BigInteger;
@@ -30,6 +35,15 @@ public class SecureTopKSequenceQueryTests {
     @Autowired
     private SecureTopKSequenceQuery secureTopKSequenceQuery;
 
+    @Autowired
+    private PartyFactory partyFactory;
+
+    @Autowired
+    private OnlineShuffling onlineShuffling;
+
+    @Autowired
+    private OfflineShuffling offlineShuffling;
+
     @Value("${genomic.records}")
     int records;
 
@@ -38,8 +52,18 @@ public class SecureTopKSequenceQueryTests {
     private BigInteger[][] genomicSequenceA;
     private BigInteger[][] genomicSequenceB;
 
+    private PartyA partyA;
+    private PartyB partyB;
+
     @Before
     public void init(){
+        partyA = partyFactory.cloudSanboxBuilder();
+        partyB = partyFactory.hospitalBuilder();
+        offlineShuffling.setPartyB(partyB);
+        offlineShuffling.setPartyA(partyA);
+        onlineShuffling.setPartyA(partyA);
+        onlineShuffling.setPartyB(partyB);
+
         queryA = gsHelper.getQueryA();
         queryB = gsHelper.getQueryB();
         genomicSequenceA = gsHelper.getGSA();

@@ -5,19 +5,19 @@ import helper.SecureHelper;
 import helper.WagnerFisher;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import paillier.PaillierPair;
 import parties.PartyA;
 import parties.PartyB;
+import parties.PartyFactory;
 import protocols.*;
 
 import java.math.BigInteger;
@@ -33,9 +33,12 @@ public class PartiesTests {
     private PaillierPair paillierPair;
 
     @Autowired
+    private PartyFactory partyFactory;
+
+
     private PartyA partyA;
 
-    @Autowired
+
     private PartyB partyB;
 
     @Value("${shuffle.arraySize}")
@@ -74,8 +77,19 @@ public class PartiesTests {
     @Autowired
     private WagnerFisher wagnerFisher;
 
+    @Before
+    public void init(){
+        partyA = partyFactory.cloudSanboxBuilder();
+        partyB = partyFactory.hospitalBuilder();
+        offlineShuffling.setPartyA(partyA);
+        offlineShuffling.setPartyB(partyB);
+        onlineShuffling.setPartyA(partyA);
+        onlineShuffling.setPartyB(partyB);
+    }
+
     @Test
     public void simpleTest(){
+        Assert.assertNotNull(partyA);
         partyA.setPk(paillierPair.getPaillierPublicKey());
         partyA.addToRandomArrayPool(arraySize);
 
@@ -147,6 +161,8 @@ public class PartiesTests {
     @Test
     public void offlineAndOnlineCombining(){
         arraySize = new Random().nextInt(50);
+        /*offlineShuffling.setPartyA(partyA);
+        offlineShuffling.setPartyB(partyB);*/
         offlineShuffling.setArraySize(arraySize);
 
         BigInteger[] L2 = offlineShuffling.getL2FromPartyB();

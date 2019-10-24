@@ -16,11 +16,11 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class OfflineShuffling {
-    @Autowired
+    @Setter
     private PartyA partyA;
 
 
-    @Autowired
+    @Setter
     private PartyB partyB;
 
     @Setter

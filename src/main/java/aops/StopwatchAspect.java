@@ -13,18 +13,22 @@ import java.util.concurrent.TimeUnit;
 @Aspect
 @Component
 public class StopwatchAspect {
-    private Stopwatch stopwatch;
+    private Stopwatch stopwatch = Stopwatch.createUnstarted();
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Around("@annotation(LogExecutionTime)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable{
-        stopwatch = Stopwatch.createStarted();
+        logger.info("=================================================================================");
+
+        logger.info(joinPoint.getSignature() + " starting.....");
+        stopwatch = stopwatch.start();
         Object proceed = joinPoint.proceed();
-        stopwatch.stop();
         long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-        System.out.println("===================================================");
-        logger.info(joinPoint.getSignature() + " executed in " + mills + " ms");
-        System.out.println("====================================================");
+        stopwatch.reset();
+
+        logger.info("=================================================================================");
+        logger.info(joinPoint.getTarget() + " executed in " + mills + " ms");
+        logger.info("=================================================================================");
         return proceed;
     }
 

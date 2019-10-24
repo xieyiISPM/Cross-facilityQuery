@@ -3,11 +3,10 @@ package parties;
 import com.n1analytics.paillier.PaillierPublicKey;
 import helper.SecureHelper;
 import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import paillier.PaillierPair;
 
@@ -17,10 +16,10 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+
 public class PartyB implements PartyInterface {
 
-    @Value("${party.bitSize}")
+    @Setter
     private int bitSize;
 
     private Map<Integer, BigInteger[]> VArrayPool = new HashMap<>();
@@ -29,10 +28,10 @@ public class PartyB implements PartyInterface {
     private Map<Integer, BigInteger[]> L0Pool = new HashMap<>();
     private Map<Integer, BigInteger[]> L2Pool = new HashMap<>();
 
-    @Autowired
-    private SecureHelper sh;
+    @Setter
+    private SecureHelper secureHelper;
 
-    @Autowired
+    @Setter
     private PaillierPair paillierPair;
 
     @Getter
@@ -45,8 +44,7 @@ public class PartyB implements PartyInterface {
 
     }
 
-    @PostConstruct
-    private void setup(){
+    public void setupTwoToL(){
         twoToL = BigInteger.TWO.pow(bitSize);
 
     }
@@ -58,7 +56,7 @@ public class PartyB implements PartyInterface {
 
     @Override
     public void addToRandomArrayPool(Integer arrSize){
-        VArrayPool.put(arrSize, sh.genRandomArray(arrSize, srand));
+        VArrayPool.put(arrSize, secureHelper.genRandomArray(arrSize, srand));
     }
 
     @Override

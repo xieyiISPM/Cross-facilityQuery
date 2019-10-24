@@ -1,8 +1,10 @@
 package protocols;
 
+import aops.LogExecutionTime;
 import helper.GeneralHelper;
 import helper.SecureHelper;
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import parties.PartyA;
+import parties.PartyB;
 
 import javax.annotation.PostConstruct;
 import java.math.BigInteger;
@@ -25,6 +29,12 @@ public class SecureTopKSequenceQuery {
     private int n; // records number
 
     private BigInteger twoToL;
+
+    @Setter
+    private PartyA partyA;
+
+    @Setter
+    private PartyB partyB;
 
     @Getter
     private Pair<BigInteger, BigInteger> [] indexDistTupleB;
@@ -66,6 +76,7 @@ public class SecureTopKSequenceQuery {
     @PostConstruct
     private void init(){
         twoToL = BigInteger.TWO.pow(bitSize);
+
     }
 
     /**
@@ -122,6 +133,7 @@ public class SecureTopKSequenceQuery {
         }
     }
 
+   // @LogExecutionTime
     public void genTopKIndexDistTuple(BigInteger[]QA,BigInteger[][] SA, BigInteger[] QB, BigInteger[][] SB, int k){
         secureQueryPreCompute(QA, SA, QB, SB);
         Assert.state(k<=m,"Top k where k must smaller than array size" + m );
