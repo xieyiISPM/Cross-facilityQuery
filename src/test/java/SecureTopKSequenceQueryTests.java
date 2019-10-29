@@ -57,7 +57,7 @@ public class SecureTopKSequenceQueryTests {
 
     @Before
     public void init(){
-        partyA = partyFactory.cloudSanboxBuilder();
+        partyA = partyFactory.cloudSandboxBuilder();
         partyB = partyFactory.hospitalBuilder();
         offlineShuffling.setPartyB(partyB);
         offlineShuffling.setPartyA(partyA);

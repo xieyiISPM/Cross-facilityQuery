@@ -1,7 +1,6 @@
 package parties;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
@@ -11,8 +10,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Stack;
 
-@NoArgsConstructor
-public class Hospitals {
+public class Hospital extends PartyB{
 
     @Getter
     @Setter
@@ -33,6 +31,10 @@ public class Hospitals {
 
     @Getter
     private int hospitalId;
+
+    public Hospital(int hospitalId){
+        this.hospitalId = hospitalId;
+    }
 
     public void addTopKIndexDistancePair(Pair<BigInteger, BigInteger>[] indexDistPairArray){
         this.indexDistPairArray = indexDistPairArray;

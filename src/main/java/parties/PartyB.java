@@ -6,18 +6,16 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 import paillier.PaillierPair;
 
-import javax.annotation.PostConstruct;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class PartyB implements PartyInterface {
+public class PartyB extends CloudHospital implements PartyInterface {
 
     @Setter
     private int bitSize;

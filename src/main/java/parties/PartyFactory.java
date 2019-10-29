@@ -28,7 +28,7 @@ public class PartyFactory {
 
     }
 
-    public PartyA cloudSanboxBuilder(){
+    public PartyA cloudSandboxBuilder(){
         PartyA partyA =  new PartyA();
         partyA.setPaillierPair(paillierPair);
         partyA.setSecureHelper(secureHelper);

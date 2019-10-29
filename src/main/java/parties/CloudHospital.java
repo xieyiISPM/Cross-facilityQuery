@@ -1,16 +1,18 @@
 package parties;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
 
-public class Cloud extends PartyA {
+public class CloudHospital {
     @Getter
     @Setter
     private BigInteger[] genomicSequence; //genomicSequence setter should accept array
@@ -28,10 +30,15 @@ public class Cloud extends PartyA {
     @Getter
     private ArrayList<Triple<BigInteger, Integer, Integer>> finalResultList = new ArrayList<>();
 
+
     @Getter
     private int hospitalId;
 
-    public Cloud(int hospitalId){
+    public CloudHospital(){
+
+    }
+
+    public CloudHospital(int hospitalId){
         this.hospitalId = hospitalId;
     }
 
@@ -87,6 +94,5 @@ public class Cloud extends PartyA {
         }
         return temp;
     }
-
 
 }

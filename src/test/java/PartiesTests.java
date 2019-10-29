@@ -79,7 +79,7 @@ public class PartiesTests {
 
     @Before
     public void init(){
-        partyA = partyFactory.cloudSanboxBuilder();
+        partyA = partyFactory.cloudSandboxBuilder();
         partyB = partyFactory.hospitalBuilder();
         offlineShuffling.setPartyA(partyA);
         offlineShuffling.setPartyB(partyB);
