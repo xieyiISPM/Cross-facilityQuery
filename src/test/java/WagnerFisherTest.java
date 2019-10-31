@@ -1,5 +1,5 @@
-import config.appConfiguration;
 import config.TestConfiguration;
+import config.appConfiguration;
 import helper.Helper;
 import helper.WagnerFisher;
 import org.junit.Test;

@@ -18,8 +18,9 @@ public class PartyFactory {
     private int bitSize;
 
 
-    public PartyB hospitalBuilder(){
+    public PartyB hospitalBuilder(int idNum){
         PartyB partyB =  new PartyB();
+        partyB.setHospitalId(idNum);
         partyB.setPaillierPair(paillierPair);
         partyB.setSecureHelper(secureHelper);
         partyB.setBitSize(bitSize);
@@ -28,8 +29,9 @@ public class PartyFactory {
 
     }
 
-    public PartyA cloudSandboxBuilder(){
+    public PartyA cloudSandboxBuilder(int idNum){
         PartyA partyA =  new PartyA();
+        partyA.setHospitalId(idNum);
         partyA.setPaillierPair(paillierPair);
         partyA.setSecureHelper(secureHelper);
         partyA.setBitSize(bitSize);

@@ -1,6 +1,5 @@
 package protocols;
 
-import aops.LogExecutionTime;
 import com.google.common.base.Stopwatch;
 import helper.GeneralHelper;
 import lombok.Getter;

@@ -8,8 +8,6 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Stack;
 
 public class CloudHospital {
@@ -32,6 +30,7 @@ public class CloudHospital {
 
 
     @Getter
+    @Setter
     private int hospitalId;
 
     public CloudHospital(){

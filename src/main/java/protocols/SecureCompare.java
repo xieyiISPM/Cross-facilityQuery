@@ -1,7 +1,6 @@
 package protocols;
 
 import aops.LogExecutionTime;
-import com.google.common.base.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +10,6 @@ import javax.annotation.PostConstruct;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class SecureCompare {
