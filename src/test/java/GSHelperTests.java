@@ -61,5 +61,58 @@ public class GSHelperTests {
         Assert.assertArrayEquals(originalQuery, reconstructedQuery);
     }
 
+    @Test
+    public void testRealGs(){
+        System.out.println("Cloud Side:");
+        for (int i = 0; i< records; i++){
+            for (int j = 0; j < gsHelper.getGSA()[i].length; j++){
+                System.out.print(gsHelper.getGSA()[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+
+        System.out.println("Hospital side:");
+        for (int i = 0; i< records; i++){
+            for (int j = 0; j < gsHelper.getGSB()[i].length; j++){
+                System.out.print(gsHelper.getGSB()[i][j] + " ");
+            }
+            System.out.println();
+
+        }
+        System.out.println();
+
+        System.out.println("Original sequence:");
+        for (int i = 0; i< records; i++){
+            for (int j = 0; j < gsHelper.getOriginalGS()[i].length; j++){
+                System.out.print(gsHelper.getOriginalGS()[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    @Test
+    public void testRealQuery(){
+        System.out.println("Cloud Side query:");
+        for (int i = 0; i< records; i++){
+            System.out.print(gsHelper.getQueryA()[i] + " ");
+        }
+        System.out.println();
+
+        System.out.println("Hospital side query:");
+        for (int i = 0; i< records; i++){
+            System.out.print(gsHelper.getQueryB()[i] + " ");
+        }
+        System.out.println();
+
+        System.out.println("Original Query:");
+        for (int i = 0; i< records; i++){
+            System.out.print(gsHelper.getOriginalQuery()[i] + " ");
+        }
+        System.out.println();
+    }
+
+
+
 
 }

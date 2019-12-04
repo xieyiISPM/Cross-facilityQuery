@@ -2,6 +2,7 @@ package helper;
 
 
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.ArrayList;
+import java.util.*;
 
 @Service
 public class GSHelper {
@@ -18,6 +19,7 @@ public class GSHelper {
     private int bitSize;
 
     @Value("${genomic.sequence.arraySize}")
+    @Setter
     private int arraySize;
 
     private BigInteger twoToL;
@@ -30,6 +32,12 @@ public class GSHelper {
 
     @Getter
     private Triple<BigInteger[][], BigInteger[][], BigInteger[][]> genomicSequenceTriple;
+
+    private List<BigInteger> genomicElements = new ArrayList<>(Arrays.asList(BigInteger.valueOf(1),
+                                                                                    BigInteger.valueOf(2),
+                                                                                    BigInteger.valueOf(3),
+                                                                                    BigInteger.valueOf(4)));
+    private Random random = new Random();
 
 
     public GSHelper(){}
@@ -70,7 +78,7 @@ public class GSHelper {
      * @return
      */
     private Triple<BigInteger[], BigInteger[], BigInteger[]> genQueryTriple(){
-        ArrayList<Triple<BigInteger, BigInteger,BigInteger>> bigTripleQShare = genShares(bitSize, arraySize);
+        ArrayList<Triple<BigInteger, BigInteger,BigInteger>> bigTripleQShare = genRealQuery();
         BigInteger[] QA = new BigInteger[arraySize];
         BigInteger[] QB = new BigInteger[arraySize];
         BigInteger[] Q = new BigInteger[arraySize];
@@ -94,7 +102,7 @@ public class GSHelper {
         BigInteger[][] S = new BigInteger[records][arraySize];
 
         for(int i= 0; i< records; i++){
-            ArrayList<Triple<BigInteger, BigInteger,BigInteger>> bigTripleSShare = genShares(bitSize, arraySize);
+            ArrayList<Triple<BigInteger, BigInteger,BigInteger>> bigTripleSShare = genRealShares();
 
             for(int j=0; j< arraySize;j++){
                 SA[i][j] = bigTripleSShare.get(j).getLeft();
@@ -127,5 +135,34 @@ public class GSHelper {
         }
         return bigTripleArray;
     }
+
+    private ArrayList<Triple<BigInteger, BigInteger,BigInteger>> genRealShares(){
+
+        ArrayList<Triple<BigInteger, BigInteger, BigInteger>> bigTripleArray = new ArrayList<>();
+
+        for (int i = 0; i < arraySize; i++){
+            BigInteger origin = BigInteger.valueOf(random.nextInt(4) + 1);
+            bigTripleArray.add(new ImmutableTriple<>(BigInteger.ZERO, origin, origin));
+        }
+        return bigTripleArray;
+    }
+
+    private ArrayList<Triple<BigInteger, BigInteger,BigInteger>> genRealQuery(){
+        SecureRandom srand = new SecureRandom();
+        BigInteger[] arr = new BigInteger[2];
+        BigInteger m = this.twoToL;
+        ArrayList<Triple<BigInteger, BigInteger, BigInteger>> bigTripleArray = new ArrayList<>();
+
+        for (int i = 0; i < arraySize; i++){
+            BigInteger sum = BigInteger.valueOf(random.nextInt(4) + 1);
+            arr[0] = new BigInteger(bitSize, srand);
+            arr[1] = (sum.subtract(arr[0])).mod(m);
+            bigTripleArray.add(new ImmutableTriple(arr[0], sum, arr[1]));
+        }
+        return bigTripleArray;
+    }
+
+
+
 
 }

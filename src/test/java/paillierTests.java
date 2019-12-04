@@ -1,5 +1,5 @@
 import com.google.common.base.Stopwatch;
-import config.appConfiguration;
+import config.AppConfiguration;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes={appConfiguration.class})
+@ContextConfiguration(classes={AppConfiguration.class})
 public class paillierTests {
     @Autowired
     private PaillierPair paillierPair;

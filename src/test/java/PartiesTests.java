@@ -161,40 +161,40 @@ public class PartiesTests {
 
     @Test
     public void offlineAndOnlineCombining(){
-        arraySize = new Random().nextInt(50);
+        for(arraySize = 100; arraySize < 1100; arraySize = arraySize+100) {
         /*offlineShuffling.setPartyA(partyA);
         offlineShuffling.setPartyB(partyB);*/
-        offlineShuffling.setArraySize(arraySize);
+            offlineShuffling.setArraySize(arraySize);
 
-        BigInteger[] L2 = offlineShuffling.getL2FromPartyB();
+            BigInteger[] L2 = offlineShuffling.getL2FromPartyB();
 
-        Assert.assertNotNull(L2);
+            Assert.assertNotNull(L2);
 
-        BigInteger[] partyBHalf = sh.genRandomArray(arraySize, new SecureRandom());
-        BigInteger[] partyAHalf = sh.genRandomArray(arraySize, new SecureRandom());
+            BigInteger[] partyBHalf = sh.genRandomArray(arraySize, new SecureRandom());
+            BigInteger[] partyAHalf = sh.genRandomArray(arraySize, new SecureRandom());
 
-        BigInteger[] partyFull = new BigInteger[arraySize];
+            BigInteger[] partyFull = new BigInteger[arraySize];
 
-        BigInteger twoToL = BigInteger.TWO.pow(bitSize);
+            BigInteger twoToL = BigInteger.TWO.pow(bitSize);
 
-        for(int i = 0; i< arraySize; i++){
-            partyFull[i] = partyAHalf[i].add(partyBHalf[i]).mod(twoToL);
+            for (int i = 0; i < arraySize; i++) {
+                partyFull[i] = partyAHalf[i].add(partyBHalf[i]).mod(twoToL);
+            }
+
+            BigInteger[] partyFullPrime = helper.permutedArrayOrder(partyFull, partyA.getPi(arraySize));
+
+            onlineShuffling.onLineShuffling(partyBHalf, partyAHalf);
+            BigInteger[] L3 = onlineShuffling.getL3();
+            BigInteger[] L4 = onlineShuffling.getL4();
+            Assert.assertNotNull(L4);
+
+            BigInteger[] partyRecover = new BigInteger[arraySize];
+            for (int i = 0; i < arraySize; i++) {
+                partyRecover[i] = L2[i].add(L4[i]).mod(twoToL);
+            }
+
+            Assert.assertArrayEquals(partyFullPrime, partyRecover);
         }
-
-        BigInteger[] partyFullPrime = helper.permutedArrayOrder(partyFull,partyA.getPi(arraySize));
-
-        onlineShuffling.onLineShuffling(partyBHalf, partyAHalf);
-        BigInteger[] L3  = onlineShuffling.getL3();
-        BigInteger[] L4 = onlineShuffling.getL4();
-        Assert.assertNotNull(L4);
-
-        BigInteger[] partyRecover = new BigInteger[arraySize];
-        for(int i = 0; i< arraySize; i++){
-            partyRecover[i] = L2[i].add(L4[i]).mod(twoToL);
-        }
-
-        Assert.assertArrayEquals(partyFullPrime, partyRecover);
-
     }
 
     @Test

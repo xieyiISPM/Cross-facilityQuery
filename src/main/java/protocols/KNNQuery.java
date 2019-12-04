@@ -86,8 +86,9 @@ public class KNNQuery {
             }
             hospitals[winnerID].popIndexDistPair();
             clouds[winnerID].popIndexDistPair();
-            int position = hospitals[winnerID].getIndexDistPairStackSize() - hospitals[winnerID].getIndexDistPairStackSize() ; //todo
+            int position = hospitals[winnerID].getIndexDistPairArrayLength() - hospitals[winnerID].getIndexDistPairStackSize()-1 ; //todo
             hospitals[winnerID].setWinInfoList(position, i, true);
+            clouds[winnerID].setWinInfoList(position, i, true);
             winnerSet.add(winnerID);
         }
 

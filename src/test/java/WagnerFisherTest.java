@@ -1,5 +1,5 @@
 import config.TestConfiguration;
-import config.appConfiguration;
+import config.AppConfiguration;
 import helper.Helper;
 import helper.WagnerFisher;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes={appConfiguration.class, TestConfiguration.class})
+@ContextConfiguration(classes={AppConfiguration.class, TestConfiguration.class})
 @TestPropertySource(locations = "classpath:application.properties")
 
 @ComponentScan(basePackages = "test")

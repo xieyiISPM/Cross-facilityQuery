@@ -43,7 +43,7 @@ public class SecureBranch {
         twoToL = BigInteger.TWO.pow(bitSize);
     }
 
-    @LogExecutionTime
+    //@LogExecutionTime
     public void addAndCompare(BigInteger[] xA, BigInteger[]xB, BigInteger[] yA, BigInteger[]yB){
         Stopwatch stopwatch = Stopwatch.createStarted();
         if(xA.length != xB.length || yA.length!= yB.length || xA.length != yA.length || xA.length != 2){

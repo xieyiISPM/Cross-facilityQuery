@@ -87,14 +87,14 @@ public class PartyA extends CloudHospital implements PartyInterface {
     private void addToL1Pool(BigInteger[] L0){
         Integer arraySize = L0.length;
         if(L1Pool.containsKey(arraySize)){
-            logger.warn(this.getClass() + "L1Pool has " + arraySize + " key");
+       //     logger.warn(this.getClass() + "L1Pool has " + arraySize + " key");
             return;
         }
         if(!UArrayPool.containsKey(arraySize)){
             addToRandomArrayPool(arraySize);
         }
         else{
-            logger.warn(this.getClass()+"UArrayPool has "+ arraySize + " key");
+         //   logger.warn(this.getClass()+"UArrayPool has "+ arraySize + " key");
         }
         BigInteger[] U = getRandomArray(arraySize);
 
@@ -111,11 +111,11 @@ public class PartyA extends CloudHospital implements PartyInterface {
         L1Pool.put(arraySize,L1);
         if(!piPool.containsKey(arraySize)){
             piPool.put(arraySize, secureHelper.genPi(arraySize));
-            logger.warn(this.getClass()+" piPool add "+ arraySize + " key");
+        //    logger.warn(this.getClass()+" piPool add "+ arraySize + " key");
 
         }
         else{
-            logger.info(this.getClass()+" piPool has "+ arraySize + " key");
+          //  logger.info(this.getClass()+" piPool has "+ arraySize + " key");
         }
         Integer[] pi = piPool.get(arraySize);
         L1PrimePool.put(arraySize, secureHelper.permRandomArray(L1,pi));
@@ -130,19 +130,19 @@ public class PartyA extends CloudHospital implements PartyInterface {
     }
 
     public BigInteger[] getL4Prime(BigInteger[] partyAHalf, BigInteger[] L3){
-        logger.info("Online phase of secure Shuffling starting for " + this.getClass() + " !");
+      //  logger.info("Online phase of secure Shuffling starting for " + this.getClass() + " !");
 
         Assert.notNull(partyAHalf, "party A 's input can not be null.");
         Assert.notEmpty(partyAHalf, "Party A can not be empty.");
         Assert.notNull(L3, "Array L3 can not be null");
 
         if(partyAHalf.length!=L3.length){
-            logger.error("Array size between L3 and party A's input do not match!");
+           // logger.error("Array size between L3 and party A's input do not match!");
         }
 
         if(!UArrayPool.containsKey(partyAHalf.length)){
-            logger.error("Can not retrieve related U array with size; " + partyAHalf.length + " " +
-                    " \n Make sure you have offline Secure protocols first! ");
+         //   logger.error("Can not retrieve related U array with size; " + partyAHalf.length + " " +
+         //           " \n Make sure you have offline Secure protocols first! ");
             return null;
         }
 

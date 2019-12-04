@@ -8,9 +8,9 @@ import paillier.PaillierPair;
 
 @Configuration
 @EnableAspectJAutoProxy
-@ComponentScan(basePackages= {"protocols", "parties", "aops"})
+@ComponentScan(basePackages= {"protocols", "parties", "aops", "gc"})
 @PropertySource(value={"classpath:application.properties"})
-public class appConfiguration {
+public class AppConfiguration {
 
     @Value("${paillier.keySize}")
     private int paillierKeySize;

@@ -36,7 +36,7 @@ public class OfflineShuffling {
     }
 
     private BigInteger[] getL0FromPartyB(){
-        logger.info("Offline protocols starting...!");
+        //logger.info("Offline protocols starting...!");
         L0 = partyB.getL0(arraySize);
         return L0;
     }
@@ -57,8 +57,8 @@ public class OfflineShuffling {
         L2 = partyB.getL2(L1);
 
         stopwatch.stop();
-        long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-        logger.info("======== Offline protocols cost time: " + mills + " ms arraySize= " + L2.length + " ==========");
+        long mills = stopwatch.elapsed(TimeUnit.SECONDS);
+        logger.info("======== Offline protocols cost time: " + mills + " s arraySize= " + L2.length + " ==========");
         return L2;
     }
 
