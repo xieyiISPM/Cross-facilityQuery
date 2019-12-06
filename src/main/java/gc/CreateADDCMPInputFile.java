@@ -21,16 +21,16 @@ public class CreateADDCMPInputFile {
 
     }
 
-    public void setADDCMPClientVar(BigInteger bigIntA1, BigInteger bigIntB1) throws Exception{
+    public void setADDCMPClientVar(BigInteger bigIntA1, BigInteger bigIntA2) throws Exception{
         PrintWriter pw = new PrintWriter(clientInputFile);
         pw.println("a1 " + bigIntA1);
-        pw.println("b1 " + bigIntB1);
+        pw.println("a2 " + bigIntA2);
         pw.close();
     }
 
-    public void setADDCMPSeverVar(BigInteger bigIntA2, BigInteger bigIntB2) throws Exception{
+    public void setADDCMPSeverVar(BigInteger bigIntB1, BigInteger bigIntB2) throws Exception{
         PrintWriter pw = new PrintWriter(serverInputFile);
-        pw.println("a2 " + bigIntA2);
+        pw.println("b1 " + bigIntB1);
         pw.println("b2 " + bigIntB2);
 
         pw.close();

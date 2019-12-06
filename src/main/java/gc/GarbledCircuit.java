@@ -13,7 +13,10 @@ import java.math.BigInteger;
 @Service
 public class GarbledCircuit {
     @Value("${add.cmp.cir}")
-    private String circuitFile;
+    private String addCmpcircuitFile;
+
+    @Value("${cmp.cir}")
+    private String cmpcircuitFile;
 
     @Value("${b.input.file}")
     private String serverInputFile;
@@ -54,7 +57,7 @@ public class GarbledCircuit {
         createADDCMPInputFile.setADDCMPSeverVar(yA, yB);
 
         //must have absolute path here!!!
-        ProcessBuilder gcProcess = new ProcessBuilder(cmd, circuitFile,serverInputFile,clientInputFile );
+        ProcessBuilder gcProcess = new ProcessBuilder(cmd, addCmpcircuitFile,serverInputFile,clientInputFile );
         gcProcess.directory(new File(gcDir));
 
         Process p = gcProcess.start();
@@ -85,7 +88,7 @@ public class GarbledCircuit {
         createADDCMPInputFile.setCMPSeverVar(B);
 
         //must have absolute path here!!!
-        ProcessBuilder gcProcess = new ProcessBuilder(cmd, circuitFile,serverInputFile,clientInputFile );
+        ProcessBuilder gcProcess = new ProcessBuilder(cmd, cmpcircuitFile,serverInputFile,clientInputFile );
         gcProcess.directory(new File(gcDir));
 
         Process p = gcProcess.start();
