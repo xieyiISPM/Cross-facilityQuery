@@ -18,7 +18,9 @@ import protocols.OfflineShuffling;
 import protocols.OnlineShuffling;
 import protocols.SecureTopKSequenceQuery;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes={TestConfiguration.class})
@@ -106,5 +108,16 @@ public class SecureTopKSequenceQueryTests {
             System.out.print(helper.reconstruct(secureTopKSequenceQuery.getTopKIndexDistTupleA()[i].getRight(), secureTopKSequenceQuery.getTopKIndexDistTupleB()[i].getRight()) + " ");
         }
         System.out.println();
+    }
+
+    @Test
+    public void fileReadTest() throws IOException {
+        BigInteger[][] gs = gsHelper.readGsFile();
+        for(int i = 0; i< 20;i++) {
+            System.out.print(gs[0][i]);
+        }
+        System.out.println();
+        System.out.println(gs.length);
+        System.out.println(gs[0].length);
     }
 }

@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.*;
@@ -27,6 +30,10 @@ public class GSHelper {
     @Value("${genomic.records}")
     private int records;
 
+    @Value("${genomic.file}")
+    private String dbFile;
+
+
     @Getter
     private Triple<BigInteger[], BigInteger[], BigInteger[]> queryTriple;
 
@@ -43,7 +50,7 @@ public class GSHelper {
     public GSHelper(){}
 
     @PostConstruct
-    private void init(){
+    private void init() throws IOException{
         twoToL = BigInteger.TWO.pow(bitSize);
         queryTriple = genQueryTriple();
         genomicSequenceTriple = genGS();
@@ -77,8 +84,12 @@ public class GSHelper {
      * QueryA, Query(original), and QueryB
      * @return
      */
-    private Triple<BigInteger[], BigInteger[], BigInteger[]> genQueryTriple(){
-        ArrayList<Triple<BigInteger, BigInteger,BigInteger>> bigTripleQShare = genRealQuery();
+    private Triple<BigInteger[], BigInteger[], BigInteger[]> genQueryTriple() throws IOException{
+
+     //   ArrayList<Triple<BigInteger, BigInteger,BigInteger>> bigTripleQShare = genRealQuery();
+        int index = new Random().nextInt(1405);
+        ArrayList<Triple<BigInteger, BigInteger,BigInteger>> bigTripleQShare = createQuery(index);
+
         BigInteger[] QA = new BigInteger[arraySize];
         BigInteger[] QB = new BigInteger[arraySize];
         BigInteger[] Q = new BigInteger[arraySize];
@@ -96,8 +107,8 @@ public class GSHelper {
      * Genomic Sequence A, Sequence (original), Sequence B
      * @return
      */
-    private Triple<BigInteger[][], BigInteger[][], BigInteger[][]> genGS(){
-        BigInteger[][] SA = new BigInteger[records][arraySize];
+    private Triple<BigInteger[][], BigInteger[][], BigInteger[][]> genGS() throws IOException{
+        /*BigInteger[][] SA = new BigInteger[records][arraySize];
         BigInteger[][] SB = new BigInteger[records][arraySize];
         BigInteger[][] S = new BigInteger[records][arraySize];
 
@@ -111,8 +122,8 @@ public class GSHelper {
             }
         }
 
-        return new ImmutableTriple<>(SA,S, SB);
-
+        return new ImmutableTriple<>(SA,S, SB);*/
+        return readGS();
     }
 
     /**
@@ -162,7 +173,63 @@ public class GSHelper {
         return bigTripleArray;
     }
 
+    public BigInteger[][] readGsFile() throws IOException{
+        FileReader fileReader = new FileReader(dbFile);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        List<String> lines = new ArrayList<>();
+        String line = null;
+        while((line= bufferedReader.readLine()) !=null){
+            lines.add(line);
+        }
+        bufferedReader.close();
+        String[] stringLine = lines.toArray(new String[lines.size()]);
+        BigInteger[][] gs = new BigInteger[lines.size()][stringLine[0].length()];
+        for(int i = 0; i < gs.length; i++){
+            for(int j = 0; j< gs[i].length; j++){
+                switch(stringLine[i].charAt(j)){
+                    case 'A':
+                        gs[i][j] = BigInteger.valueOf(0);
+                        break;
+                    case 'C':
+                        gs[i][j] = BigInteger.valueOf(1);
+                        break;
+                    case 'G':
+                        gs[i][j] = BigInteger.valueOf(2);
+                        break;
+                    case 'T':
+                        gs[i][j] = BigInteger.valueOf(3);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return gs;
+    }
 
+    private Triple<BigInteger[][], BigInteger[][], BigInteger[][]> readGS() throws IOException{
+        BigInteger[][] S = readGsFile();
+        BigInteger[][] SA = new BigInteger[S.length][S[0].length];
+        return new ImmutableTriple<>(SA,S, S);
+    }
 
+    private ArrayList<Triple<BigInteger, BigInteger,BigInteger>> createQuery(int index) throws IOException {
+        BigInteger[][] S = readGsFile();
+        BigInteger[] query = S[index];
+
+        SecureRandom srand = new SecureRandom();
+        BigInteger[] arr = new BigInteger[2];
+        BigInteger m = this.twoToL;
+
+        ArrayList<Triple<BigInteger, BigInteger, BigInteger>> bigTripleArray = new ArrayList<>();
+
+        for (int i = 0; i < query.length; i++){
+            arr[0] = new BigInteger(bitSize, srand);
+            arr[1] = (query[i].subtract(arr[0])).mod(m);
+            bigTripleArray.add(new ImmutableTriple(arr[0], query[i], arr[1]));
+        }
+        return bigTripleArray;
+
+    }
 
 }
