@@ -14,7 +14,7 @@
         <lombok.version>1.18.8</lombok.version>
         <n1analytics.version>0.6.0</n1analytics.version>
         <guava.version>27.0.1-jre</guava.version>
-        <bouncycastle.version>1.60</bouncycastle.version>
+        <bouncycastle.version>1.67</bouncycastle.version>
         <jupiter.api.version>5.4.1</jupiter.api.version>
         <jupiter.engine.version>5.4.1</jupiter.engine.version>
         <ntru.version>1.2</ntru.version>
