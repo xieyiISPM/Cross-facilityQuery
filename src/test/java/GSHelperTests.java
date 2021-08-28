@@ -2,6 +2,7 @@ import config.TestConfiguration;
 import helper.GSHelper;
 import helper.Helper;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,14 @@ public class GSHelperTests {
     @Autowired
     private Helper helper;
 
-    @Value("${genomic.records}")
+   // @Value("${genomic.records}")
     int records;
+
+    @Before
+    public void setup(){
+        records = gsHelper.getOriginalGS().length;
+    }
+
 
     @Test
     public void testNotNull(){
@@ -47,7 +54,6 @@ public class GSHelperTests {
             BigInteger[] gsB = gsHelper.getGSB()[i];
             BigInteger[] gsOriginal = gsHelper.getOriginalGS()[i];
             BigInteger[] reconstructedGS = helper.reconstruct(gsA, gsB);
-
             Assert.assertArrayEquals(gsOriginal, reconstructedGS);
 
         }

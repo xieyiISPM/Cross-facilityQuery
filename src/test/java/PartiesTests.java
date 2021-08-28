@@ -262,8 +262,8 @@ public class PartiesTests {
     @Test
     public void secureExactEditDistanceTest(){
 
-       int xLength = 15;
-       int yLength = 10;
+       int xLength = 800;
+       int yLength = 600;
 
         String strX = RandomStringUtils.randomAlphabetic(xLength).toUpperCase();
         System.out.println(strX);
@@ -273,10 +273,10 @@ public class PartiesTests {
         BigInteger[] x  = helper.strToBigInt(strX);
         BigInteger[] y = helper.strToBigInt(strY);
 
-        /*System.out.println("x original array:");
+        System.out.println("x original array:");
         helper.printList(x);
         System.out.println("y original array");
-        helper.printList(y);*/
+        helper.printList(y);
 
         SecureRandom srand = new SecureRandom();
 
@@ -289,18 +289,18 @@ public class PartiesTests {
         BigInteger[] xFull = helper.reconstruct(xAHalf, xBHalf);
         BigInteger[] yFull = helper.reconstruct(yAHalf, yBHalf);
 
-        /*System.out.println("x reconstructed array:");
+        System.out.println("x reconstructed array:");
         helper.printList(xFull);
         System.out.println("y reconstructed array");
         helper.printList(yFull);
-        System.out.println();*/
+        System.out.println();
 
         Assert.assertArrayEquals(x, xFull);
         Assert.assertArrayEquals(y, yFull);
 
 
         BigInteger[][] editDistance = wagnerFisher.getEditDistance(xFull,yFull);
-        //helper.print2DArray(editDistance);
+        helper.print2DArray(editDistance);
 
         int n1 = editDistance.length;
         int n2 = editDistance[0].length;
@@ -309,7 +309,7 @@ public class PartiesTests {
         BigInteger dEDA = seed.getDEDA();
         BigInteger dEBB = seed.getDEDB();
 
-       // System.out.println("Reconstructed edit distance: " + helper.reconstruct(dEDA, dEBB));
+       System.out.println("Reconstructed edit distance: " + helper.reconstruct(dEDA, dEBB));
 
         Assert.assertEquals(editDistance[n1 -1 ][n2 -1 ], helper.reconstruct(dEDA, dEBB));
 

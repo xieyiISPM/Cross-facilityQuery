@@ -86,10 +86,10 @@ public class GSHelper {
      */
     private Triple<BigInteger[], BigInteger[], BigInteger[]> genQueryTriple() throws IOException{
 
-     //   ArrayList<Triple<BigInteger, BigInteger,BigInteger>> bigTripleQShare = genRealQuery();
-        int index = new Random().nextInt(1405);
+        ArrayList<Triple<BigInteger, BigInteger,BigInteger>> bigTripleQShare = genRealQuery();
+       /* int index = new Random().nextInt(1045);
         ArrayList<Triple<BigInteger, BigInteger,BigInteger>> bigTripleQShare = createQuery(index);
-
+*/
         BigInteger[] QA = new BigInteger[arraySize];
         BigInteger[] QB = new BigInteger[arraySize];
         BigInteger[] Q = new BigInteger[arraySize];
@@ -147,7 +147,7 @@ public class GSHelper {
         return bigTripleArray;
     }
 
-    private ArrayList<Triple<BigInteger, BigInteger,BigInteger>> genRealShares(){
+    private ArrayList<Triple<BigInteger, BigInteger,BigInteger>> genFakeShares(){
 
         ArrayList<Triple<BigInteger, BigInteger, BigInteger>> bigTripleArray = new ArrayList<>();
 
@@ -157,6 +157,8 @@ public class GSHelper {
         }
         return bigTripleArray;
     }
+
+
 
     private ArrayList<Triple<BigInteger, BigInteger,BigInteger>> genRealQuery(){
         SecureRandom srand = new SecureRandom();
@@ -210,6 +212,11 @@ public class GSHelper {
     private Triple<BigInteger[][], BigInteger[][], BigInteger[][]> readGS() throws IOException{
         BigInteger[][] S = readGsFile();
         BigInteger[][] SA = new BigInteger[S.length][S[0].length];
+        for(int i = 0; i< S.length; i++){
+            for (int j = 0; j<S[0].length; j++){
+                SA[i][j] = BigInteger.ZERO;
+            }
+        }
         return new ImmutableTriple<>(SA,S, S);
     }
 
