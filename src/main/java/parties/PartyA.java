@@ -37,7 +37,6 @@ public class PartyA extends CloudHospital implements PartyInterface {
     @Setter
     private PaillierPair paillierPair;
 
-    @Setter
     @Getter
     private PaillierPublicKey pk;
     private Map<Integer, Integer[]> piPool = new HashMap<>();
@@ -81,7 +80,7 @@ public class PartyA extends CloudHospital implements PartyInterface {
     }
 
     /**
-     * Generate L1'
+     * Generate L1'  C offline get L1'
      * @param L0
      */
     private void addToL1Pool(BigInteger[] L0){
@@ -129,6 +128,12 @@ public class PartyA extends CloudHospital implements PartyInterface {
         return L1PrimePool.get(L0.length);
     }
 
+    /**
+     * Online C get L4'
+     * @param partyAHalf
+     * @param L3
+     * @return
+     */
     public BigInteger[] getL4Prime(BigInteger[] partyAHalf, BigInteger[] L3){
       //  logger.info("Online phase of secure Shuffling starting for " + this.getClass() + " !");
 

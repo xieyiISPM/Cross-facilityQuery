@@ -63,24 +63,43 @@ public class PartyB extends CloudHospital implements PartyInterface {
     }
 
 
+    /**
+     * offline Hi sends L0 to C
+     * @param key
+     * @return
+     */
+    public BigInteger[] getL0(Integer key){
+        addToL0PooL(key);
+        return L0Pool.get(key);
+    }
 
+
+    /**
+     * Offline Hi get L2
+     * @param partyAL1Prime
+     * @return
+     */
     public BigInteger[] getL2(BigInteger[] partyAL1Prime){
         addToL2Pool(partyAL1Prime);
 
         return L2Pool.get(partyAL1Prime.length);
     }
 
-    public BigInteger[] getL0(Integer key){
-        addToL0PooL(key);
-        return L0Pool.get(key);
-    }
 
     public BigInteger[] getVArray(Integer key){
         return VArrayPool.get(key);
     }
 
+
+
+
+    /**
+     * online Hi get L3 and send to C
+     * @param partyBHalf
+     * @return
+     */
     public BigInteger[] getL3(BigInteger[] partyBHalf){
-      //  logger.info("Online phase of secure Shuffling starting for " + this.getClass() + " !");
+        //  logger.info("Online phase of secure Shuffling starting for " + this.getClass() + " !");
 
         Assert.notNull(partyBHalf, "Party B's input is null!");
         Assert.notEmpty(partyBHalf, "Party B has no elements inside");
@@ -106,7 +125,7 @@ public class PartyB extends CloudHospital implements PartyInterface {
 
     private void addToL0PooL(int arraySize){
         if(L0Pool.containsKey(arraySize)){
-         //   logger.warn(this.getClass() + "L0Pool has " + arraySize + " key");
+            //   logger.warn(this.getClass() + "L0Pool has " + arraySize + " key");
             return;
         }
         else{
@@ -117,13 +136,13 @@ public class PartyB extends CloudHospital implements PartyInterface {
                 L0[i] = paillierPair.getPaillierPublicKey().raw_encrypt(vArray[i]);
             }
             L0Pool.put(arraySize,L0);
-        //    logger.info(this.getClass() + "L0Pool has been add new random u array, with " + arraySize + " key");
+            //    logger.info(this.getClass() + "L0Pool has been add new random u array, with " + arraySize + " key");
         }
     }
 
     private void addToL2Pool(BigInteger[] L1Prime){
         if(L2Pool.containsKey(L1Prime.length)){
-        //    logger.warn(this.getClass() + "L2Pool has " + L1Prime.length + " key");
+            //    logger.warn(this.getClass() + "L2Pool has " + L1Prime.length + " key");
             return;
         }
         BigInteger[] L2 = new BigInteger[L1Prime.length];
@@ -134,6 +153,7 @@ public class PartyB extends CloudHospital implements PartyInterface {
         }
         L2Pool.put(L1Prime.length, L2);
     }
+
 
 
 

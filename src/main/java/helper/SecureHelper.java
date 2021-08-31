@@ -65,8 +65,7 @@ public class SecureHelper {
      */
     public BigInteger[] permRandomArray(BigInteger[] arr, Integer[] pi){
         if(arr.length != pi.length) {
-            System.err.println("Array size does not match permutation function size");
-            return null;
+            throw new IllegalArgumentException("Array size does not match permutation function size");
         }
         BigInteger[] permRand = new BigInteger[arr.length];
         for(int i = 0; i< arr.length; i++){
