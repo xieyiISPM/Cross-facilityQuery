@@ -46,7 +46,6 @@ public class SecureTopKSequenceQueryTests {
     @Autowired
     private OfflineShuffling offlineShuffling;
 
-    @Value("${genomic.records}")
     int records;
 
     private BigInteger[] queryA;
@@ -71,12 +70,13 @@ public class SecureTopKSequenceQueryTests {
         queryB = gsHelper.getQueryB();
         genomicSequenceA = gsHelper.getGSA();
         genomicSequenceB = gsHelper.getGSB();
+        records = genomicSequenceA.length;
     }
 
 
     @Test
     public void setSecureTopKSequenceQuery(){
-        int k = 3;
+        int k = 1;
         secureTopKSequenceQuery.genTopKIndexDistTuple(queryA, genomicSequenceA,queryB,genomicSequenceB, k);
 
         Assert.assertNotNull(secureTopKSequenceQuery.getIndexDistTupleA());

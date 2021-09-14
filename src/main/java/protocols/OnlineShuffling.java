@@ -33,20 +33,6 @@ public class OnlineShuffling {
         logger.info("Online protocols started...");
     }
 
-    private void generateL3ForPartyB(BigInteger[] partyBHalf){
-        //logger.info("Generate L3 array!");
-        L3=null;
-        Assert.isNull(L3, "L3 init should be null!");
-        L3 = partyB.getL3(partyBHalf);
-    }
-
-    private void generateL4ForPartyA(BigInteger[] partyAHalf){
-      //  logger.info("Generate L4' array!");
-        Assert.notNull(L3, "L3 is null, you must let partyB generate L3 first...");
-        L4=null;
-        Assert.isNull(L4, "L4 init should be null!");
-        L4 =  partyA.getL4Prime(partyAHalf, L3);
-    }
 
     public void onLineShuffling(BigInteger[] partyBHalf, BigInteger[] partyAHalf){
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -55,5 +41,20 @@ public class OnlineShuffling {
         stopwatch.stop();
         long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
         logger.info("======== Online protocols cost time: " + mills + " ms arraySize = " + L3.length + " ========");
+    }
+
+    private void generateL3ForPartyB(BigInteger[] partyBHalf){
+        //logger.info("Generate L3 array!");
+        L3=null;
+        Assert.isNull(L3, "L3 init should be null!");
+        L3 = partyB.getL3(partyBHalf);
+    }
+
+    private void generateL4ForPartyA(BigInteger[] partyAHalf){
+        //  logger.info("Generate L4' array!");
+        Assert.notNull(L3, "L3 is null, you must let partyB generate L3 first...");
+        L4=null;
+        Assert.isNull(L4, "L4 init should be null!");
+        L4 =  partyA.getL4Prime(partyAHalf, L3);
     }
 }

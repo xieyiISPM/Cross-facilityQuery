@@ -35,16 +35,6 @@ public class OfflineShuffling {
     public OfflineShuffling(){
     }
 
-    private BigInteger[] getL0FromPartyB(){
-        //logger.info("Offline protocols starting...!");
-        L0 = partyB.getL0(arraySize);
-        return L0;
-    }
-
-    private BigInteger[] getL1PrimeFromPartyA(){
-        L1 = partyA.getL1Prime(L0);
-        return L1;
-    }
 
     public BigInteger[] getL2FromPartyB(){
 
@@ -60,6 +50,17 @@ public class OfflineShuffling {
         long mills = stopwatch.elapsed(TimeUnit.SECONDS);
         logger.info("======== Offline protocols cost time: " + mills + " s arraySize= " + L2.length + " ==========");
         return L2;
+    }
+
+    private BigInteger[] getL0FromPartyB(){
+        //logger.info("Offline protocols starting...!");
+        L0 = partyB.getL0(arraySize);
+        return L0;
+    }
+
+    private BigInteger[] getL1PrimeFromPartyA(){
+        L1 = partyA.getL1Prime(L0);
+        return L1;
     }
 
 }

@@ -241,8 +241,11 @@ public class PartiesTests {
         /*BigInteger[] xBHalf = {BigInteger.valueOf(5),BigInteger.valueOf(6)};
         BigInteger[] xAHalf = {BigInteger.valueOf(3), BigInteger.valueOf(21)};*/
 
+        BigInteger[] reconstructed = new BigInteger[arraySize];
+
         System.out.println("Reconstructed x:");
         for (int i = 0; i < arraySize; i++){
+            reconstructed[i] = helper.reconstruct(xBHalf[i], xAHalf[i]);
             System.out.print(helper.reconstruct(xBHalf[i], xAHalf[i]) + " ");
         }
         System.out.println();
@@ -255,6 +258,8 @@ public class PartiesTests {
         helper.printList(partyA.getPi(arraySize));
 
         System.out.println("Reconstructed minimum output: " +helper.reconstruct(sms.getXMinA(), sms.getXMinB()));
+
+        Assert.assertEquals(helper.reconstruct(sms.getXMinA(), sms.getXMinB()), helper.findMin(reconstructed));
 
     }
 
@@ -314,8 +319,5 @@ public class PartiesTests {
         Assert.assertEquals(editDistance[n1 -1 ][n2 -1 ], helper.reconstruct(dEDA, dEBB));
 
     }
-
-
-
 
 }

@@ -78,7 +78,7 @@ public class OnlineOfflineExperiments {
 
     @Test
     public void offlineAndOnlineCombining(){
-        for(arraySize = 1000; arraySize < 1100; arraySize = arraySize+100) {
+        for(arraySize = 200; arraySize < 500; arraySize = arraySize+200) {
 
             offlineShuffling.setArraySize(arraySize);
 

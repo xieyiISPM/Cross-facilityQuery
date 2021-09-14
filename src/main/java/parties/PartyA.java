@@ -38,6 +38,7 @@ public class PartyA extends CloudHospital implements PartyInterface {
     private PaillierPair paillierPair;
 
     @Getter
+    @Setter
     private PaillierPublicKey pk;
     private Map<Integer, Integer[]> piPool = new HashMap<>();
 

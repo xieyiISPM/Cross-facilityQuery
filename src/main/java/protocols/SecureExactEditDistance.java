@@ -66,11 +66,11 @@ public class SecureExactEditDistance {
         BigInteger[][] deltaB = new BigInteger[n1+1][n2+1];
 
         for(int i = 0; i<= n1; i++){
-            deltaA[i][0] =BigInteger.valueOf(i);
+            deltaA[i][0] = BigInteger.valueOf(i);
             deltaB[i][0] = BigInteger.ZERO;
         }
         for(int j = 0; j<= n2; j++){
-            deltaA[0][j] =BigInteger.valueOf(j);
+            deltaA[0][j] = BigInteger.valueOf(j);
             deltaB[0][j] = BigInteger.ZERO;
         }
 

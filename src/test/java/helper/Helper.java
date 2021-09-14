@@ -112,4 +112,14 @@ public class Helper {
         return array;
     }
 
+    public BigInteger findMin(BigInteger[] arr){
+        BigInteger min = arr[0];
+        for(int i = 1; i< arr.length; i++){
+            if(min.compareTo(arr[i]) > 0){
+                min = arr[i];
+            }
+        }
+        return min;
+    }
+
 }
