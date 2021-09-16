@@ -9,6 +9,8 @@ import paillier.PaillierPair;
 
 import javax.annotation.PostConstruct;
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Random;
 
 @Service
 public class Helper {
@@ -120,6 +122,32 @@ public class Helper {
             }
         }
         return min;
+    }
+
+    public String generateGenomicSeq(int length){
+        Random rand = new Random();
+        char [] characters = new char[length];
+        int randNum;
+        for(int i = 0; i< length;i++){
+            randNum = rand.nextInt(4);
+            switch(randNum){
+                case 0:
+                    characters[i] = 'A';
+                    break;
+                case 1:
+                    characters[i] = 'C';
+                    break;
+                case 2:
+                    characters[i] = 'G';
+                    break;
+                case 3:
+                    characters[i] = 'T';
+                    break;
+                default:
+                    break;
+            }
+        }
+        return new String(characters);
     }
 
 }

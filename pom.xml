@@ -102,11 +102,17 @@
             <version>${jupiter.engine.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.emilianobonassi</groupId>
-            <artifactId>jpbc</artifactId>
-            <version>${emilianobonassi.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.emilianobonassi</groupId>-->
+<!--            <artifactId>jpbc</artifactId>-->
+<!--            <version>${emilianobonassi.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.github.User</groupId>-->
+<!--            <artifactId>Repo</artifactId>-->
+<!--            <version>Tag</version>-->
+<!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>

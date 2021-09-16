@@ -267,12 +267,12 @@ public class PartiesTests {
     @Test
     public void secureExactEditDistanceTest(){
 
-       int xLength = 800;
-       int yLength = 600;
+       int xLength = 8;
+       int yLength = 6;
 
-        String strX = RandomStringUtils.randomAlphabetic(xLength).toUpperCase();
+        String strX = helper.generateGenomicSeq(xLength);
         System.out.println(strX);
-        String strY = RandomStringUtils.randomAlphabetic(yLength).toUpperCase();
+        String strY = helper.generateGenomicSeq(yLength);
         System.out.println(strY);
 
         BigInteger[] x  = helper.strToBigInt(strX);
