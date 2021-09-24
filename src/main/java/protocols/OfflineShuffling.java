@@ -48,7 +48,7 @@ public class OfflineShuffling {
 
         stopwatch.stop();
         long mills = stopwatch.elapsed(TimeUnit.SECONDS);
-        logger.info("======== Offline protocols cost time: " + mills + " s arraySize= " + L2.length + " ==========");
+     //   logger.info("======== Offline protocols cost time: " + mills + " s arraySize= " + L2.length + " ==========");
         return L2;
     }
 

@@ -40,7 +40,7 @@ public class OnlineShuffling {
         generateL4ForPartyA(partyAHalf);
         stopwatch.stop();
         long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-        logger.info("======== Online protocols cost time: " + mills + " ms arraySize = " + L3.length + " ========");
+       // logger.info("======== Online protocols cost time: " + mills + " ms arraySize = " + L3.length + " ========");
     }
 
     private void generateL3ForPartyB(BigInteger[] partyBHalf){

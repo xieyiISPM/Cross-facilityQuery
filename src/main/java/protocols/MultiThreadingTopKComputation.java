@@ -41,13 +41,13 @@ public class MultiThreadingTopKComputation implements Callable<String> {
     public MultiThreadingTopKComputation(){
 
     }
-    /*public MultiThreadingTopKComputation(PartyA partyA, PartyB partyB, int k){
+    public MultiThreadingTopKComputation(PartyA partyA, PartyB partyB, int k){
         this.partyA = partyA;
         this.partyB = partyB;
         this.k = k;
-    }*/
+    }
 
-    /*@Async
+   /* @Async
     public CompletableFuture<Void> topKComputation(PartyA partyA, PartyB partyB, int k) {
         logger.info("Thread starting----");
         this.partyA = partyA;

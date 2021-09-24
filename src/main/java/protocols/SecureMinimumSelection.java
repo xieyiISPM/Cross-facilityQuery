@@ -79,7 +79,7 @@ public class SecureMinimumSelection{
 
         stopwatch.stop();
         long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-        logger.info("======== SecureMinimumSelection protocols cost time: " + mills + " ms arraySize= " + minimumSelectionArraySize + " ==========");
+        //logger.info("======== SecureMinimumSelection protocols cost time: " + mills + " ms arraySize= " + minimumSelectionArraySize + " ==========");
     }
 
 

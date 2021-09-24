@@ -102,8 +102,7 @@ public class PartyB extends CloudHospital implements PartyInterface {
         //  logger.info("Online phase of secure Shuffling starting for " + this.getClass() + " !");
 
         Assert.notNull(partyBHalf, "Party B's input is null!");
-        Assert.notEmpty(partyBHalf, "Party B has no elements inside");
-
+        Assert.noNullElements(partyBHalf, "there is null element in party B Half");
 
         if(!VArrayPool.containsKey(partyBHalf.length)){
             logger.error("Can not retrieve related v array with size; " + partyBHalf.length + " " +
@@ -111,15 +110,15 @@ public class PartyB extends CloudHospital implements PartyInterface {
             return null;
         }
 
-        BigInteger [] vArray = VArrayPool.get(partyBHalf.length);
 
         BigInteger [] L3 = new BigInteger[partyBHalf.length];
 
         int i = 0;
-        for(BigInteger x: partyBHalf){
+        for (BigInteger x : partyBHalf) {
             L3[i] = x.add(VArrayPool.get(partyBHalf.length)[i]).mod(twoToL);
             i++;
         }
+
         return L3;
     }
 

@@ -18,7 +18,9 @@ import protocols.OfflineShuffling;
 import protocols.OnlineShuffling;
 import protocols.SecureTopKSequenceQuery;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -76,14 +78,15 @@ public class SecureTopKSequenceQueryTests {
 
     @Test
     public void setSecureTopKSequenceQuery(){
-        int k = 1;
+
+        int k = 10;
         secureTopKSequenceQuery.genTopKIndexDistTuple(queryA, genomicSequenceA,queryB,genomicSequenceB, k);
 
         Assert.assertNotNull(secureTopKSequenceQuery.getIndexDistTupleA());
         Assert.assertNotNull(secureTopKSequenceQuery.getIndexDistTupleB());
         Assert.assertNotNull(secureTopKSequenceQuery.getTopKIndexDistTupleA());
         Assert.assertNotNull(secureTopKSequenceQuery.getTopKIndexDistTupleB());
-
+/*
         System.out.println("Index reconstructing:");
         for(int i=0;i < records; i++){
             System.out.print(helper.reconstruct(secureTopKSequenceQuery.getIndexDistTupleA()[i].getLeft(), secureTopKSequenceQuery.getIndexDistTupleB()[i].getLeft()) + " ");
@@ -94,7 +97,7 @@ public class SecureTopKSequenceQueryTests {
         for(int i=0;i < records; i++){
             System.out.print(helper.reconstruct(secureTopKSequenceQuery.getIndexDistTupleA()[i].getRight(), secureTopKSequenceQuery.getIndexDistTupleB()[i].getRight()) + " ");
         }
-        System.out.println();
+        System.out.println();*/
 
 
         System.out.println("Top " + k + " index");

@@ -21,7 +21,7 @@ public class GSHelper {
     @Value("${party.bitSize}")
     private int bitSize;
 
-    @Value("${genomic.sequence.arraySize}")
+    //@Value("${genomic.sequence.arraySize}")
     @Setter
     private int arraySize;
 
@@ -52,8 +52,10 @@ public class GSHelper {
     @PostConstruct
     private void init() throws IOException{
         twoToL = BigInteger.TWO.pow(bitSize);
-        queryTriple = genQueryTriple();
         genomicSequenceTriple = genGS();
+        arraySize = genomicSequenceTriple.getMiddle().length;
+        queryTriple = genQueryTriple();
+
     }
 
     public BigInteger[][] getGSA(){
@@ -90,7 +92,7 @@ public class GSHelper {
        /* int index = new Random().nextInt(1045);
         ArrayList<Triple<BigInteger, BigInteger,BigInteger>> bigTripleQShare = createQuery(index);
 */
-        BigInteger[] QA = new BigInteger[arraySize];
+       BigInteger[] QA = new BigInteger[arraySize];
         BigInteger[] QB = new BigInteger[arraySize];
         BigInteger[] Q = new BigInteger[arraySize];
 
@@ -180,9 +182,23 @@ public class GSHelper {
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         List<String> lines = new ArrayList<>();
         String line = null;
+        /*int lineNumber = 1;
         while((line= bufferedReader.readLine()) !=null){
             lines.add(line);
+            if(line.length()!=500){
+                throw new IllegalStateException("line at " + lineNumber + " line length: " + line.length() );
+
+            }
+        }*/
+        for(int n =0; n<records; n++){
+            line= bufferedReader.readLine();
+            lines.add(line);
+            if(line.length()!=500){
+                throw new IllegalStateException("line at " + n + " line length: " + line.length() );
+
+            }
         }
+
         bufferedReader.close();
         String[] stringLine = lines.toArray(new String[lines.size()]);
         BigInteger[][] gs = new BigInteger[lines.size()][stringLine[0].length()];
@@ -201,8 +217,47 @@ public class GSHelper {
                     case 'T':
                         gs[i][j] = BigInteger.valueOf(3);
                         break;
-                    default:
+                    case 'U':
+                        gs[i][j] = BigInteger.valueOf(4);
                         break;
+                    case 'W':
+                        gs[i][j] = BigInteger.valueOf(5);
+                        break;
+                    case 'S':
+                        gs[i][j] = BigInteger.valueOf(6);
+                        break;
+                    case 'M':
+                        gs[i][j] = BigInteger.valueOf(7);
+                        break;
+                    case 'K':
+                        gs[i][j] = BigInteger.valueOf(8);
+                        break;
+                    case 'R':
+                        gs[i][j] = BigInteger.valueOf(9);
+                        break;
+                    case 'Y':
+                        gs[i][j] = BigInteger.valueOf(10);
+                        break;
+                    case 'B':
+                        gs[i][j] = BigInteger.valueOf(11);
+                        break;
+                    case 'D':
+                        gs[i][j] = BigInteger.valueOf(12);
+                        break;
+                    case 'H':
+                        gs[i][j] = BigInteger.valueOf(13);
+                        break;
+                    case 'V':
+                        gs[i][j] = BigInteger.valueOf(14);
+                        break;
+                    case 'N':
+                        gs[i][j] = BigInteger.valueOf(15);
+                        break;
+                    case 'Z':
+                        gs[i][j] = BigInteger.valueOf(16);
+                        break;
+                    default:
+                        throw new IllegalStateException("Illegal gen char: " + stringLine[i].charAt(j));
                 }
             }
         }

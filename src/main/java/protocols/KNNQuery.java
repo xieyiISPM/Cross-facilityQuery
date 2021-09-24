@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 import parties.PartyA;
 import parties.PartyB;
 
+import java.io.*;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -103,7 +104,9 @@ public class KNNQuery {
     }
 
 
-    public void kNN(PartyA[] clouds, PartyB[] hospitals, int k){
+    public void kNN(PartyA[] clouds, PartyB[] hospitals, int k) throws IOException
+
+    {
         Assert.isTrue(k<=genomicRecords,"k should less or equal than records number!");
         this.hospitals = hospitals;
         this.clouds = clouds;
@@ -112,7 +115,13 @@ public class KNNQuery {
         genKNN();
         stopwatch.stop();
         long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+
+        String filename = "knntest";
+        PrintWriter printWriter = new PrintWriter(new FileOutputStream(new File(filename),true));
+
         logger.info("======== kNN protocols cost time: " + mills + " ms k= " + k + " ==========");
+        printWriter.printf("======== kNN protocols cost time:  %s +  ms k=  %s ==========\n", mills, k);
+        printWriter.close();
     }
 
 

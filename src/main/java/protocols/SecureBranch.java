@@ -75,7 +75,7 @@ public class SecureBranch {
 
         stopwatch.stop();
         long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-        logger.info("======== SecureBranch protocols cost time: " + mills + " ms arraySize= " + branchArraySize + " ==========");
+     //   logger.info("======== SecureBranch protocols cost time: " + mills + " ms arraySize= " + branchArraySize + " ==========");
     }
 
 }

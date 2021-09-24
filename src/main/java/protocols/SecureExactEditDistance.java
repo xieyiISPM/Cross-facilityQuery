@@ -94,6 +94,9 @@ public class SecureExactEditDistance {
                 BigInteger t2A = yA[j-1].subtract(BigInteger.ONE).mod(twoToL);
                 BigInteger t2B = yB[j-1];
 
+                BigInteger xb = xB[i-1];
+                BigInteger xTemp[] = GeneralHelper.genArray(t1B, xb);
+
                 sb.addAndCompare(GeneralHelper.genArray(t1A,xA[i-1]),GeneralHelper.genArray(t1B,xB[i-1]), GeneralHelper.genArray(z0A, z1A), GeneralHelper.genArray(z0B, z1B));
                 BigInteger t3A = sb.getYOutputA();
                 BigInteger t3B = sb.getYOutputB();
@@ -125,7 +128,7 @@ public class SecureExactEditDistance {
 
         stopwatch.stop();
         long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-        logger.info("======== SecureEditDistance protocols cost time: " + mills + " ms n1 = " + n1 + " n2 = " + n2 + " ==========");
+        //logger.info("======== SecureEditDistance protocols cost time: " + mills + " ms n1 = " + n1 + " n2 = " + n2 + " ==========");
     }
 
 }
