@@ -120,7 +120,7 @@ public class KNNQuery {
         PrintWriter printWriter = new PrintWriter(new FileOutputStream(new File(filename),true));
 
         logger.info("======== kNN protocols cost time: " + mills + " ms k= " + k + " ==========");
-        printWriter.printf("======== kNN protocols cost time:  %s +  ms k=  %s ==========\n", mills, k);
+        printWriter.printf("======== kNN protocols cost time:  %s +  ms k=  %s  + hospitals: %s ==========\n", mills, k, hospitals.length);
         printWriter.close();
     }
 

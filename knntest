@@ -1,0 +1,11 @@
+======== kNN protocols cost time:  7 +  ms k=  10 ==========
+======== kNN protocols cost time:  3 +  ms k=  20 ==========
+======== kNN protocols cost time:  11 +  ms k=  30 ==========
+======== kNN protocols cost time:  30 +  ms k=  40 ==========
+======== kNN protocols cost time:  25 +  ms k=  50 ==========
+======== kNN protocols cost time:  14 +  ms k=  60 ==========
+
+
+======== kNN protocols cost time:  6 +  ms k=  10 hospitals: 10 ==========
+======== kNN protocols cost time:  7 +  ms k=  10  + hospitals: 20 ==========
+======== kNN protocols cost time:  14 +  ms k=  10  + hospitals: 100 ==========

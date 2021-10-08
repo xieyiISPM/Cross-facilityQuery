@@ -50,7 +50,7 @@ public class KNNTests {
     private KNNQuery knnQuery;
 
 
-    static final int  partyNum = 10;
+    static final int  partyNum = 100;
     private PartyA[] partyAs = new PartyA[partyNum];
     private PartyB[] partyBs = new PartyB[partyNum];
 
@@ -65,8 +65,8 @@ public class KNNTests {
     @Test
     public void knnTest() throws IOException {
 
+            int k = 60;
 
-        for(int k = 10; k< 100; k=k+10) {
 
             for (int i = 0; i < partyNum; i++) {
 
@@ -95,7 +95,42 @@ public class KNNTests {
 
             Assert.assertEquals(k, knnQuery.getFinalCKNN().size());
             Assert.assertEquals(k, knnQuery.getFinalHKNN().size());
+
+    }
+
+    @Test
+    public void knnDifferentHospitalTest() throws IOException {
+
+        int k = 10;
+
+
+        for (int i = 0; i < partyNum; i++) {
+
+            offlineShuffling.setPartyB(partyBs[i]);
+            offlineShuffling.setPartyA(partyAs[i]);
+            onlineShuffling.setPartyA(partyAs[i]);
+            onlineShuffling.setPartyB(partyBs[i]);
+            BigInteger[] queryA = gsHelper.getQueryA();
+            BigInteger[] queryB = gsHelper.getQueryB();
+            BigInteger[][] genomicSequenceA = gsHelper.getGSA();
+            BigInteger[][] genomicSequenceB = gsHelper.getGSB();
+            secureTopKSequenceQuery.genTopKIndexDistTuple(queryA, genomicSequenceA, queryB, genomicSequenceB, k);
+
+            Assert.assertNotNull(secureTopKSequenceQuery.getIndexDistTupleA());
+            Assert.assertNotNull(secureTopKSequenceQuery.getIndexDistTupleB());
+            Assert.assertNotNull(secureTopKSequenceQuery.getTopKIndexDistTupleA());
+            Assert.assertNotNull(secureTopKSequenceQuery.getTopKIndexDistTupleB());
+            partyAs[i].addTopKIndexDistancePair(secureTopKSequenceQuery.getTopKIndexDistTupleA());
+            partyBs[i].addTopKIndexDistancePair(secureTopKSequenceQuery.getTopKIndexDistTupleB());
+            System.out.println();
+
         }
+
+        knnQuery.kNN(partyAs, partyBs, k);
+
+
+        Assert.assertEquals(k, knnQuery.getFinalCKNN().size());
+        Assert.assertEquals(k, knnQuery.getFinalHKNN().size());
 
     }
 
