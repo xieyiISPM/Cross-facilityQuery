@@ -80,9 +80,9 @@ public class OnlineOfflineExperiments {
     public void offlineAndOnlineCombining(){
         for(arraySize = 200; arraySize < 500; arraySize = arraySize+200) {
 
-            offlineShuffling.setArraySize(arraySize);
 
-            BigInteger[] L2 = offlineShuffling.getL2FromPartyB();
+
+            BigInteger[] L2 = offlineShuffling.getL2FromPartyB(arraySize);
 
             Assert.assertNotNull(L2);
 

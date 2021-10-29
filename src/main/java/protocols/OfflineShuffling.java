@@ -4,7 +4,6 @@ import com.google.common.base.Stopwatch;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import parties.PartyA;
@@ -18,13 +17,8 @@ public class OfflineShuffling {
     @Setter
     private PartyA partyA;
 
-
     @Setter
     private PartyB partyB;
-
-    @Setter
-    @Value("${shuffle.arraySize}")
-    private int arraySize;
 
     private BigInteger[] L0;
     private BigInteger[] L1;
@@ -36,10 +30,10 @@ public class OfflineShuffling {
     }
 
 
-    public BigInteger[] getL2FromPartyB(){
+    public synchronized BigInteger[] getL2FromPartyB(int arraySize){
 
         Stopwatch stopwatch = Stopwatch.createStarted();
-        getL0FromPartyB();
+        getL0FromPartyB(arraySize);
         getL1PrimeFromPartyA();
 
         Assert.notNull(L1, "Party A must generate L1 first!" );
@@ -52,7 +46,7 @@ public class OfflineShuffling {
         return L2;
     }
 
-    private BigInteger[] getL0FromPartyB(){
+    private BigInteger[] getL0FromPartyB(int arraySize){
         //logger.info("Offline protocols starting...!");
         L0 = partyB.getL0(arraySize);
         return L0;

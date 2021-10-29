@@ -3,7 +3,6 @@ import config.TestConfiguration;
 import helper.Helper;
 import helper.SecureHelper;
 import helper.WagnerFisher;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +21,6 @@ import protocols.*;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Random;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes={TestConfiguration.class})
@@ -76,6 +74,8 @@ public class PartiesTests {
 
     @Autowired
     private WagnerFisher wagnerFisher;
+    @Autowired
+    private GeneralHelper generalHelper;
 
     @Before
     public void init(){
@@ -161,12 +161,11 @@ public class PartiesTests {
 
     @Test
     public void offlineAndOnlineCombining(){
-        for(arraySize = 100; arraySize < 1100; arraySize = arraySize+100) {
+        for(arraySize = 100; arraySize < 200; arraySize = arraySize+100) {
         /*offlineShuffling.setPartyA(partyA);
         offlineShuffling.setPartyB(partyB);*/
-            offlineShuffling.setArraySize(arraySize);
 
-            BigInteger[] L2 = offlineShuffling.getL2FromPartyB();
+            BigInteger[] L2 = offlineShuffling.getL2FromPartyB(arraySize);
 
             Assert.assertNotNull(L2);
 
@@ -196,6 +195,8 @@ public class PartiesTests {
             Assert.assertArrayEquals(partyFullPrime, partyRecover);
         }
     }
+
+
 
     @Test
     public void secureBranchTest(){
@@ -267,8 +268,9 @@ public class PartiesTests {
     @Test
     public void secureExactEditDistanceTest(){
 
-       int xLength = 8;
-       int yLength = 6;
+       int xLength = 100;
+       int yLength = 50;
+        System.out.println("GC ADDCOMP used in secureExactEditDistance test start: " + generalHelper.getCounter());
 
         String strX = helper.generateGenomicSeq(xLength);
         System.out.println(strX);
@@ -317,6 +319,8 @@ public class PartiesTests {
        System.out.println("Reconstructed edit distance: " + helper.reconstruct(dEDA, dEBB));
 
         Assert.assertEquals(editDistance[n1 -1 ][n2 -1 ], helper.reconstruct(dEDA, dEBB));
+        System.out.println("GC ADDCOMP used in secureExactEditDistance test : " + generalHelper.getCounter());
+
 
     }
 

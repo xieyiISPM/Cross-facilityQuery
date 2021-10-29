@@ -140,8 +140,11 @@ public class PartyA extends CloudHospital implements PartyInterface {
 
         Assert.notNull(partyAHalf, "party A 's input can not be null.");
         Assert.notEmpty(partyAHalf, "Party A can not be empty.");
-        Assert.notNull(L3, "Array L3 can not be null");
+        //Assert.notNull(L3, "Array L3 can not be null");
 
+        if (L3 == null){
+            throw new NullPointerException("Array L3 can not be null. PartyAHalf size:" + partyAHalf.length);
+        }
         if(partyAHalf.length!=L3.length){
            // logger.error("Array size between L3 and party A's input do not match!");
         }

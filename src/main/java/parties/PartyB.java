@@ -108,6 +108,7 @@ public class PartyB extends CloudHospital implements PartyInterface {
             logger.error("Can not retrieve related v array with size; " + partyBHalf.length + " " +
                     " \n Make sure you have offline Secure protocols first! ");
             return null;
+
         }
 
 

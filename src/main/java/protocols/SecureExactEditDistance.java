@@ -2,7 +2,6 @@ package protocols;
 
 
 import com.google.common.base.Stopwatch;
-import helper.GeneralHelper;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +33,8 @@ public class SecureExactEditDistance {
 
     @Autowired
     private SecureMinimumSelection sms;
+    @Autowired
+    private GeneralHelper generalHelper;
 
 
 
@@ -46,7 +47,7 @@ public class SecureExactEditDistance {
         twoToL = BigInteger.TWO.pow(bitSize);
     }
 
-    public void  getExactEditDistance(BigInteger[] xA, BigInteger[] xB, BigInteger[] yA, BigInteger[]yB){
+    public synchronized void  getExactEditDistance(BigInteger[] xA, BigInteger[] xB, BigInteger[] yA, BigInteger[]yB){
         Stopwatch stopwatch = Stopwatch.createStarted();
 
         if (xA.length != xB.length || yA.length != yB.length){
@@ -56,7 +57,7 @@ public class SecureExactEditDistance {
 
         int n1= xA.length;
         int n2 = yA.length;
-        if( twoToL.compareTo(BigInteger.valueOf(GeneralHelper.getMax(n1, n2))) < 0){
+        if( twoToL.compareTo(BigInteger.valueOf(generalHelper.getMax(n1, n2))) < 0){
             logger.error("2^l should be larger than max(xA.length, yA.length)!");
             throw new IllegalArgumentException();
         }
@@ -95,13 +96,13 @@ public class SecureExactEditDistance {
                 BigInteger t2B = yB[j-1];
 
                 BigInteger xb = xB[i-1];
-                BigInteger xTemp[] = GeneralHelper.genArray(t1B, xb);
+                BigInteger xTemp[] = generalHelper.genArray(t1B, xb);
 
-                sb.addAndCompare(GeneralHelper.genArray(t1A,xA[i-1]),GeneralHelper.genArray(t1B,xB[i-1]), GeneralHelper.genArray(z0A, z1A), GeneralHelper.genArray(z0B, z1B));
+                sb.addAndCompare(generalHelper.genArray(t1A,xA[i-1]),generalHelper.genArray(t1B,xB[i-1]), generalHelper.genArray(z0A, z1A), generalHelper.genArray(z0B, z1B));
                 BigInteger t3A = sb.getYOutputA();
                 BigInteger t3B = sb.getYOutputB();
 
-                sb.addAndCompare(GeneralHelper.genArray(xA[i-1],t2A),GeneralHelper.genArray(xB[i-1],t2B), GeneralHelper.genArray(t3A, z1A),GeneralHelper.genArray(t3B, z1B));
+                sb.addAndCompare(generalHelper.genArray(xA[i-1],t2A),generalHelper.genArray(xB[i-1],t2B), generalHelper.genArray(t3A, z1A),generalHelper.genArray(t3B, z1B));
                 BigInteger cSubA = sb.getYOutputA();
                 BigInteger cSubB = sb.getYOutputB();
 
@@ -116,7 +117,7 @@ public class SecureExactEditDistance {
                 BigInteger term3B =  deltaB[i-1][j-1].add(cSubB).mod(twoToL);
 
 
-                sms.getMini(GeneralHelper.genArray(term1A, term2A, term3A), GeneralHelper.genArray(term1B, term2B, term3B));
+                sms.getMini(generalHelper.genArray(term1A, term2A, term3A), generalHelper.genArray(term1B, term2B, term3B));
 
                 deltaA[i][j] = sms.getXMinA();
                 deltaB[i][j] = sms.getXMinB();
@@ -125,10 +126,11 @@ public class SecureExactEditDistance {
         }
         dEDA = deltaA[n1][n2];
         dEDB = deltaB[n1][n2];
+        //logger.info("GC ADDCOMP used in SecureExactEditDistance : " + GeneralHelper.getCounter());
 
         stopwatch.stop();
         long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-        //logger.info("======== SecureEditDistance protocols cost time: " + mills + " ms n1 = " + n1 + " n2 = " + n2 + " ==========");
+       // logger.info("======== SecureEditDistance protocols cost time: " + mills + " ms n1 = " + n1 + " n2 = " + n2 + " ==========");
     }
 
 }

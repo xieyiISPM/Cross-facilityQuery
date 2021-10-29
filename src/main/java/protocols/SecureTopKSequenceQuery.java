@@ -1,7 +1,5 @@
 package protocols;
 
-import aops.LogExecutionTime;
-import helper.GeneralHelper;
 import helper.SecureHelper;
 import lombok.Getter;
 import lombok.Setter;
@@ -67,6 +65,8 @@ public class SecureTopKSequenceQuery {
 
     @Autowired
     private SecureHelper secureHelper;
+    @Autowired
+    private GeneralHelper generalHelper;
 
 
     public SecureTopKSequenceQuery(){
@@ -116,10 +116,8 @@ public class SecureTopKSequenceQuery {
         BigInteger[] indexA  = secureHelper.getFirstHalf(m, srand);
         BigInteger[] indexB  = secureHelper.getSecondHalf(originalIndex, indexA);
 
-        offlineShuffling.setArraySize(indexA.length);
-
-        BigInteger[] indexBPrime = offlineShuffling.getL2FromPartyB();
-        BigInteger[] distBPrime = offlineShuffling.getL2FromPartyB();
+        BigInteger[] indexBPrime = offlineShuffling.getL2FromPartyB(indexA.length);
+        BigInteger[] distBPrime = offlineShuffling.getL2FromPartyB(indexA.length);
 
         onlineShuffling.onLineShuffling(indexB, indexA);
         BigInteger[] indexAPrime = onlineShuffling.getL4();
@@ -133,8 +131,8 @@ public class SecureTopKSequenceQuery {
         }
     }
 
-    @LogExecutionTime
-    public void genTopKIndexDistTuple(BigInteger[]QA,BigInteger[][] SA, BigInteger[] QB, BigInteger[][] SB, int k){
+    //@LogExecutionTime
+    public synchronized void genTopKIndexDistTuple(BigInteger[]QA,BigInteger[][] SA, BigInteger[] QB, BigInteger[][] SB, int k){
         secureQueryPreCompute(QA, SA, QB, SB);
         Assert.state(k<=m,"Top k where k must smaller than array size" + m );
 
@@ -150,7 +148,7 @@ public class SecureTopKSequenceQuery {
 
         for(int i= 1; i<= k;i++){
             for(int j= m-1; j>= i; j--){
-                int theta =  GeneralHelper.thetaHelper(deltaA[j][1], deltaB[j][1], deltaA[j-1][1], deltaB[j-1][1], twoToL);
+                int theta =  generalHelper.thetaHelper(deltaA[j][1], deltaB[j][1], deltaA[j-1][1], deltaB[j-1][1], twoToL);
                 if(theta==0) {
                     /**
                      * Java pass by value, therefore, I can not create a method to do swap
@@ -181,6 +179,9 @@ public class SecureTopKSequenceQuery {
             topKIndexDistTupleB[i]= new ImmutablePair(deltaB[i][0], deltaB[i][1]);
             topKIndexDistTupleA[i]= new ImmutablePair(deltaA[i][0], deltaA[i][1]);
         }
+
+       // logger.info("GC ADDCOMP used in SecureTopKSequenceQuery : " + GeneralHelper.getCounter());
+
 
     }
 

@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -14,15 +13,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import parties.PartyA;
 import parties.PartyB;
 import parties.PartyFactory;
+import protocols.GeneralHelper;
 import protocols.OfflineShuffling;
 import protocols.OnlineShuffling;
 import protocols.SecureTopKSequenceQuery;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigInteger;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes={TestConfiguration.class})
@@ -47,6 +44,9 @@ public class SecureTopKSequenceQueryTests {
 
     @Autowired
     private OfflineShuffling offlineShuffling;
+
+    @Autowired
+    private GeneralHelper generalHelper;
 
     int records;
 
@@ -78,6 +78,7 @@ public class SecureTopKSequenceQueryTests {
 
     @Test
     public void setSecureTopKSequenceQuery(){
+        System.out.println("GC ADDCOMP used in SecureTopKSequenceQuery test start: " + generalHelper.getCounter());
 
         int k = 10;
         secureTopKSequenceQuery.genTopKIndexDistTuple(queryA, genomicSequenceA,queryB,genomicSequenceB, k);
@@ -111,6 +112,8 @@ public class SecureTopKSequenceQueryTests {
             System.out.print(helper.reconstruct(secureTopKSequenceQuery.getTopKIndexDistTupleA()[i].getRight(), secureTopKSequenceQuery.getTopKIndexDistTupleB()[i].getRight()) + " ");
         }
         System.out.println();
+        System.out.println("GC ADDCOMP used in SecureTopKSequenceQuery test: " + generalHelper.getCounter());
+
     }
 
     @Test

@@ -1,7 +1,7 @@
 package protocols;
 
 import com.google.common.base.Stopwatch;
-import helper.GeneralHelper;
+//import protocols.GeneralHelper;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +38,9 @@ public class SecureMinimumSelection{
     @Autowired
     private OnlineShuffling onlineShuffling;
 
+    @Autowired
+    private GeneralHelper generalHelper;
+
     @PostConstruct
     private void init(){
         twoToL = BigInteger.TWO.pow(bitSize);
@@ -49,7 +52,7 @@ public class SecureMinimumSelection{
     }
 
 
-    public void getMini(BigInteger[] xA, BigInteger[] xB){
+    public synchronized void getMini(BigInteger[] xA, BigInteger[] xB){
         Stopwatch stopwatch = Stopwatch.createStarted();
         if(xA.length != xB.length){
             logger.error("X and Y array size does not much!");
@@ -58,8 +61,8 @@ public class SecureMinimumSelection{
 
         int arraySize = xA.length;
 
-        offlineShuffling.setArraySize(arraySize);
-        BigInteger[] xBPrime = offlineShuffling.getL2FromPartyB();
+
+        BigInteger[] xBPrime = offlineShuffling.getL2FromPartyB(xA.length);
         onlineShuffling.onLineShuffling(xB, xA);
         BigInteger[] xAPrime = onlineShuffling.getL4();
 
@@ -67,13 +70,14 @@ public class SecureMinimumSelection{
         BigInteger xDeltaB = xBPrime[0];
 
         for(int i=1; i< arraySize; i++){
-            int theta = GeneralHelper.thetaHelper(xDeltaA, xDeltaB, xAPrime[i], xBPrime[i], twoToL);
+            int theta = generalHelper.thetaHelper(xDeltaA, xDeltaB, xAPrime[i], xBPrime[i], twoToL);
 
             if(theta ==1){
                 xDeltaA = xAPrime[i];
                 xDeltaB = xBPrime[i];
             }
         }
+       // logger.info("GC ADDCOMP used in SecureMiniSelection: " + GeneralHelper.getCounter());
         xMinA = xDeltaA;
         xMinB = xDeltaB;
 

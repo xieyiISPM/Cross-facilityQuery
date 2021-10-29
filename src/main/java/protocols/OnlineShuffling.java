@@ -34,10 +34,12 @@ public class OnlineShuffling {
     }
 
 
-    public void onLineShuffling(BigInteger[] partyBHalf, BigInteger[] partyAHalf){
+    public synchronized void onLineShuffling(BigInteger[] partyBHalf, BigInteger[] partyAHalf){
         Stopwatch stopwatch = Stopwatch.createStarted();
+
         generateL3ForPartyB(partyBHalf);
         generateL4ForPartyA(partyAHalf);
+
         stopwatch.stop();
         long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
        // logger.info("======== Online protocols cost time: " + mills + " ms arraySize = " + L3.length + " ========");

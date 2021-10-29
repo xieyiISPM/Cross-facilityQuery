@@ -8,7 +8,7 @@ import paillier.PaillierPair;
 
 @Configuration
 @EnableAspectJAutoProxy
-@ComponentScan(basePackages= {"protocols", "parties", "aops", "gc"})
+@ComponentScan(basePackages= {"protocols", "parties", "aops", "gc", "helper"})
 @PropertySource(value={"classpath:application.properties"})
 public class AppConfiguration {
 

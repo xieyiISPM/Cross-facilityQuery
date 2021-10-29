@@ -20,13 +20,14 @@ public class GCTests {
 
     @Autowired
     GarbledCircuit garbledCircuit;
+    private int numBits = 20;
 
-    BigInteger twoToL = BigInteger.TWO.pow(10);
+    BigInteger twoToL = BigInteger.TWO.pow(numBits);
 
     @Test
     public void gcTest(){
-        BigInteger bigA =  new BigInteger(10, new Random());
-        BigInteger bigB = new BigInteger(10, new Random());
+        BigInteger bigA =  new BigInteger(numBits , new Random());
+        BigInteger bigB = new BigInteger(numBits , new Random());
         try {
             int result = garbledCircuit.GCCMPOutPut(bigA, bigB);
             int realResult = bigA.compareTo(bigB);
@@ -45,10 +46,10 @@ public class GCTests {
 
     @Test
     public void gcADDCMPTest(){
-        BigInteger bigA1 =  new BigInteger(10, new Random());
-        BigInteger bigA2 = new BigInteger(10, new Random());
-        BigInteger bigB1 =  new BigInteger(10, new Random());
-        BigInteger bigB2 = new BigInteger(10, new Random());
+        BigInteger bigA1 =  new BigInteger(numBits , new Random());
+        BigInteger bigA2 = new BigInteger(numBits , new Random());
+        BigInteger bigB1 =  new BigInteger(numBits , new Random());
+        BigInteger bigB2 = new BigInteger(numBits , new Random());
         try {
             int result = garbledCircuit.GCADDCMPOutPut(bigA1, bigA2, bigB1, bigB2);
             int realResult = bigA1.add(bigB1).mod(twoToL).compareTo(bigA2.add(bigB2).mod(twoToL));

@@ -4,14 +4,16 @@ import helper.GSHelper;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import parties.PartyA;
 import parties.PartyB;
 
 import java.math.BigInteger;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 
-@Service
+/*@Service*/
 public class MultiThreadingTopKComputation implements Callable<String> {
     //@Autowired
     @Setter
@@ -47,7 +49,7 @@ public class MultiThreadingTopKComputation implements Callable<String> {
         this.k = k;
     }
 
-   /* @Async
+    /*@Async
     public CompletableFuture<Void> topKComputation(PartyA partyA, PartyB partyB, int k) {
         logger.info("Thread starting----");
         this.partyA = partyA;
@@ -68,7 +70,8 @@ public class MultiThreadingTopKComputation implements Callable<String> {
         return CompletableFuture.completedFuture(null);
     }*/
 
-    @Override
+
+    /* @Override
     public String call() {
         logger.info("Thread starting----");
         offlineShuffling.setPartyB(partyB);
@@ -84,7 +87,24 @@ public class MultiThreadingTopKComputation implements Callable<String> {
         partyB.addTopKIndexDistancePair(secureTopKSequenceQuery.getTopKIndexDistTupleB());
         logger.info("Thread finished!");
         return Thread.currentThread().getName();
+    }*/
+
+    @Override
+    public String call() throws Exception{
+        logger.info("Thread starting----");
+        offlineShuffling.setPartyB(partyB);
+        offlineShuffling.setPartyA(partyA);
+        onlineShuffling.setPartyA(partyA);
+        onlineShuffling.setPartyB(partyB);
+        BigInteger[] queryA = gsHelper.getQueryA();
+        BigInteger[] queryB = gsHelper.getQueryB();
+        BigInteger[][] genomicSequenceA = gsHelper.getGSA();
+        BigInteger[][] genomicSequenceB = gsHelper.getGSB();
+        secureTopKSequenceQuery.genTopKIndexDistTuple(queryA, genomicSequenceA, queryB, genomicSequenceB, k);
+        logger.info("Thread finished!");
+        return Thread.currentThread().getName();
     }
+
 
 
 

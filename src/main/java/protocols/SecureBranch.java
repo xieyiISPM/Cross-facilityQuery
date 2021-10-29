@@ -1,8 +1,6 @@
 package protocols;
 
-import aops.LogExecutionTime;
 import com.google.common.base.Stopwatch;
-import helper.GeneralHelper;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +35,8 @@ public class SecureBranch {
 
     @Autowired
     private OnlineShuffling onlineShuffling;
+    @Autowired
+    private GeneralHelper generalHelper;
 
     @PostConstruct
     private void init(){
@@ -44,24 +44,32 @@ public class SecureBranch {
     }
 
     //@LogExecutionTime
-    public void addAndCompare(BigInteger[] xA, BigInteger[]xB, BigInteger[] yA, BigInteger[]yB){
+    public synchronized void addAndCompare(BigInteger[] xA, BigInteger[]xB, BigInteger[] yA, BigInteger[]yB){
+
         Stopwatch stopwatch = Stopwatch.createStarted();
         if(xA.length != xB.length || yA.length!= yB.length || xA.length != yA.length || xA.length != 2){
             logger.error("X and Y must be size of 2.");
             new ArrayIndexOutOfBoundsException("Secure branch compare input array error.");
         }
 
-        offlineShuffling.setArraySize(branchArraySize);
-        BigInteger[] xBPrime = offlineShuffling.getL2FromPartyB();
+
+        BigInteger[] xBPrime = offlineShuffling.getL2FromPartyB(branchArraySize);
         onlineShuffling.onLineShuffling(xB, xA);
         BigInteger[] xAPrime = onlineShuffling.getL4();
 
-        offlineShuffling.setArraySize(branchArraySize);
-        BigInteger[] yBPrime = offlineShuffling.getL2FromPartyB();
+
+        BigInteger[] yBPrime = offlineShuffling.getL2FromPartyB(branchArraySize);
         onlineShuffling.onLineShuffling(yB, yA);
         BigInteger[] yAPrime = onlineShuffling.getL4();
+        int theta;
 
-        int theta = GeneralHelper.thetaHelper(xAPrime[0], xBPrime[0], xAPrime[1], xBPrime[1], twoToL);
+        try {
+
+            theta = generalHelper.thetaHelper(xAPrime[0], xBPrime[0], xAPrime[1], xBPrime[1], twoToL);
+        }
+        catch (NullPointerException ne){
+            throw new NullPointerException("xAPrime[0], xBPrime[0], xAPrime[1], xBPrime[1]" + xAPrime[0] + xBPrime[0] + xAPrime[1]+xBPrime[1]);
+        }
 
         if(theta == 1){
             yOutputA = yAPrime[0];

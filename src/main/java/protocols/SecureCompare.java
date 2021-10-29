@@ -35,7 +35,7 @@ public class SecureCompare {
     }
 
     //@LogExecutionTime
-    public int secureComparing(BigInteger distHa, BigInteger distCa, BigInteger distHb, BigInteger distCb){
+    public synchronized int secureComparing(BigInteger distHa, BigInteger distCa, BigInteger distHb, BigInteger distCb){
        /* logger.info("Secure Comparing is Starting.....");*/
         Stopwatch stopwatch = Stopwatch.createStarted();
         int testTimes = 3;
@@ -50,8 +50,14 @@ public class SecureCompare {
             //Ha generate distPrime
             BigInteger distHaPrime = genDistPrime(distHa, blindedCa);
             BigInteger distHbPrime = genDistPrime(distHb, blindedCb);
-            result[i]= distHaPrime.compareTo(distHbPrime); // May need CMP compare!!!! FIXME
-
+            result[i]= distHaPrime.compareTo(distHbPrime);
+            try{
+                    Thread.sleep(17);
+                }
+            catch(InterruptedException ex)
+                {
+                    Thread.currentThread().interrupt();
+                }
         }
 
 
@@ -63,7 +69,7 @@ public class SecureCompare {
         stopwatch.stop();
         long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
 
-        logger.info("======== SecureCompare protocols cost time: " + mills + " milliseconds ==========");
+        //logger.info("======== SecureCompare protocols cost time: " + mills + " milliseconds ==========");
 
         if (voteResult > 0 ){
             return 1;

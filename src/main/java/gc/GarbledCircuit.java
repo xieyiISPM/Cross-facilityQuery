@@ -1,5 +1,8 @@
 package gc;
 
+import com.google.common.base.Stopwatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -9,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class GarbledCircuit {
@@ -44,11 +48,17 @@ public class GarbledCircuit {
     @Autowired
     GCOutAccess gcOutAccess;
 
+    private Stopwatch stopwatch;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+
     public GarbledCircuit(){
 
     }
 
     public int GCADDCMPOutPut(BigInteger xA, BigInteger xB, BigInteger yA, BigInteger yB) throws Exception{
+        stopwatch = Stopwatch.createStarted();
         createADDCMPInputFile.setClientInputFile(path + clientInputFile);
 
         createADDCMPInputFile.setServerInputFile(path + serverInputFile);
@@ -69,9 +79,11 @@ public class GarbledCircuit {
         while((line = reader.readLine()) != null) {
             System.out.println(line);
         }
-
+        long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+        logger.info("======== GC add and Comp: " + mills + " ==========");
         int thetaClient = gcOutAccess.readResult(clientFileName);
         int thetaServer =  gcOutAccess.readResult(serverFileName);
+
         Assert.isTrue(thetaClient==thetaServer, "Theta client should be equal to theta server");
 
 
@@ -80,6 +92,9 @@ public class GarbledCircuit {
     }
 
     public int GCCMPOutPut(BigInteger A, BigInteger B) throws Exception{
+
+        stopwatch = Stopwatch.createStarted();
+
         createADDCMPInputFile.setClientInputFile(path + clientInputFile);
 
         createADDCMPInputFile.setServerInputFile(path + serverInputFile);
@@ -100,6 +115,8 @@ public class GarbledCircuit {
         while((line = reader.readLine()) != null) {
             System.out.println(line);
         }
+        long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+        logger.info("======== GC Comp: " + mills + " ==========");
 
         int thetaClient = gcOutAccess.readResult(clientFileName);
         int thetaServer =  gcOutAccess.readResult(serverFileName);

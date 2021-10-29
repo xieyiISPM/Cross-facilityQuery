@@ -9,3 +9,57 @@
 ======== kNN protocols cost time:  6 +  ms k=  10 hospitals: 10 ==========
 ======== kNN protocols cost time:  7 +  ms k=  10  + hospitals: 20 ==========
 ======== kNN protocols cost time:  14 +  ms k=  10  + hospitals: 100 ==========
+======== kNN protocols cost time:  21 +  ms k=  10  + hospitals: 200 ==========
+======== kNN protocols cost time:  150159 +  ms k=  10  + hospitals: 200 ==========
+======== kNN protocols cost time:  1520 +  ms k=  10  + hospitals: 3 ==========
+======== kNN protocols cost time:  390 +  ms k=  5  + hospitals: 2 ==========
+======== kNN protocols cost time:  1522 +  ms k=  5  + hospitals: 5 ==========
+======== kNN protocols cost time:  386 +  ms k=  5  + hospitals: 2 ==========
+======== kNN protocols cost time:  383 +  ms k=  5  + hospitals: 2 ==========
+======== kNN protocols cost time:  388 +  ms k=  5  + hospitals: 2 ==========
+======== kNN protocols cost time:  390 +  ms k=  5  + hospitals: 2 ==========
+======== kNN protocols cost time:  386 +  ms k=  5  + hospitals: 2 ==========
+======== kNN protocols cost time:  3415 +  ms k=  5  + hospitals: 10 ==========
+======== kNN protocols cost time:  3415 +  ms k=  5  + hospitals: 10 ==========
+======== kNN protocols cost time:  3414 +  ms k=  5  + hospitals: 10 ==========
+======== kNN protocols cost time:  3413 +  ms k=  5  + hospitals: 10 ==========
+======== kNN protocols cost time:  3415 +  ms k=  5  + hospitals: 10 ==========
+======== kNN protocols cost time:  3397 +  ms k=  5  + hospitals: 10 ==========
+======== kNN protocols cost time:  377 +  ms k=  5  + hospitals: 2 ==========
+======== kNN protocols cost time:  1132 +  ms k=  5  + hospitals: 4 ==========
+======== kNN protocols cost time:  1510 +  ms k=  5  + hospitals: 5 ==========
+======== kNN protocols cost time:  2643 +  ms k=  5  + hospitals: 8 ==========
+======== kNN protocols cost time:  2642 +  ms k=  5  + hospitals: 8 ==========
+======== kNN protocols cost time:  377 +  ms k=  5  + hospitals: 2 ==========
+======== kNN protocols cost time:  1510 +  ms k=  5  + hospitals: 5 ==========
+======== kNN protocols cost time:  3397 +  ms k=  5  + hospitals: 10 ==========
+======== kNN protocols cost time:  7170 +  ms k=  5  + hospitals: 20 ==========
+======== kNN protocols cost time:  7170 +  ms k=  5  + hospitals: 20 ==========
+======== kNN protocols cost time:  378 +  ms k=  5  + hospitals: 2 ==========
+======== kNN protocols cost time:  377 +  ms k=  5  + hospitals: 2 ==========
+======== kNN protocols cost time:  7170 +  ms k=  5  + hospitals: 20 ==========
+======== kNN protocols cost time:  14334 +  ms k=  10  + hospitals: 20 ==========
+======== kNN protocols cost time:  14712 +  ms k=  5  + hospitals: 40 ==========
+======== kNN protocols cost time:  14714 +  ms k=  5  + hospitals: 40 ==========
+======== kNN protocols cost time:  29419 +  ms k=  10  + hospitals: 40 ==========
+======== kNN protocols cost time:  37340 +  ms k=  5  + hospitals: 100 ==========
+
+multithread
+
+
+======== kNN protocols cost time:  6792 +  ms k=  10  + hospitals: 10 ==========
+        KNNTest multiThread party numbers:10 Cost Time: 4688414 milliseconds======== kNN protocols cost time:  3019 +  ms k=  10  + hospitals: 5
+
+
+200 records
+======== kNN protocols cost time:  3019 +  ms k=  10  + hospitals: 5 ==========
+               KNNTest multiThread party numbers:5 Cost Time: 28935 milliseconds
+======== kNN protocols cost time:  4632 +  ms k=  10  + hospitals: 10 ==========
+  KNNTest multiThread party numbers:10 Cost Time: 50698 milliseconds
+======== kNN protocols cost time:  9775 +  ms k=  10  + hospitals: 20 ==========
+  KNNTest multiThread party numbers:20 Cost Time: 107299 milliseconds
+ ======== kNN protocols cost time:  14914 +  ms k=  10  + hospitals: 30 ==========
+  KNNTest multiThread party numbers:30 Cost Time: 160362 milliseconds
+======== kNN protocols cost time:  50906 +  ms k=  10  + hospitals: 100 ==========
+  KNNTest multiThread party numbers:100 Cost Time: 535488 milliseconds ======== kNN protocols cost time:  102312 +  ms k=  10  + hospitals: 200 ==========
+  KNNTest multiThread party numbers:200 Cost Time: 1046136 milliseconds 
