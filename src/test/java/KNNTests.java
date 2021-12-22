@@ -56,7 +56,7 @@ public class KNNTests {
 
 
 
-    static final int  partyNum = 300;
+    static final int  partyNum = 80;
     private PartyA[] partyAs = new PartyA[partyNum];
     private PartyB[] partyBs = new PartyB[partyNum];
 
@@ -72,10 +72,11 @@ public class KNNTests {
     @Test
     public void knnTest() throws IOException {
 
-            int k = 10;
+        int k = 10;
+        com.google.common.base.Stopwatch stopwatch = Stopwatch.createStarted();
 
 
-            for (int i = 0; i < partyNum; i++) {
+        for (int i = 0; i < partyNum; i++) {
 
                 offlineShuffling.setPartyB(partyBs[i]);
                 offlineShuffling.setPartyA(partyAs[i]);
@@ -93,15 +94,23 @@ public class KNNTests {
                 Assert.assertNotNull(secureTopKSequenceQuery.getTopKIndexDistTupleB());
                 partyAs[i].addTopKIndexDistancePair(secureTopKSequenceQuery.getTopKIndexDistTupleA());
                 partyBs[i].addTopKIndexDistancePair(secureTopKSequenceQuery.getTopKIndexDistTupleB());
-                System.out.println();
 
             }
 
-            knnQuery.kNN(partyAs, partyBs, k);
+        knnQuery.kNN(partyAs, partyBs, k);
+        stopwatch.stop();
+        long mills = stopwatch.elapsed(TimeUnit.MILLISECONDS);
 
 
-            Assert.assertEquals(k, knnQuery.getFinalCKNN().size());
-            Assert.assertEquals(k, knnQuery.getFinalHKNN().size());
+        String filename = "knntest";
+        PrintWriter printWriter = new PrintWriter(new FileOutputStream(new File(filename),true));
+
+        printWriter.printf("  KNNTest single thread party numbers:" + partyNum + " Cost Time: " + mills + " milliseconds ");
+        printWriter.close();
+
+
+        Assert.assertEquals(k, knnQuery.getFinalCKNN().size());
+        Assert.assertEquals(k, knnQuery.getFinalHKNN().size());
 
     }
 
@@ -134,6 +143,8 @@ public class KNNTests {
         }
 
         knnQuery.kNN(partyAs, partyBs, k);
+
+
 
 
         Assert.assertEquals(k, knnQuery.getFinalCKNN().size());
