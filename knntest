@@ -111,4 +111,25 @@ multithread
   KNNTest multiThread party numbers:70 Cost Time: 365100 milliseconds
 
 ======== kNN protocols cost time:  40627 +  ms k=  10  + hospitals: 80 ==========
-  KNNTest multiThread party numbers:80 Cost Time: 407578 milliseconds 
+  KNNTest multiThread party numbers:80 Cost Time: 407578 milliseconds
+======== kNN protocols cost time:  45754 +  ms k=  10  + hospitals: 90 ==========
+  KNNTest multiThread party numbers:90 Cost Time: 455447 milliseconds
+
+
+ singlethread
+
+======== kNN protocols cost time:  14916 +  ms k=  10  + hospitals: 30 ==========
+  KNNTest single thread party numbers:30 Cost Time: 196633 milliseconds
+======== kNN protocols cost time:  20055 +  ms k=  10  + hospitals: 40 ==========
+  KNNTest single thread party numbers:40 Cost Time: 259991 milliseconds
+======== kNN protocols cost time:  25175 +  ms k=  10  + hospitals: 50 ==========
+  KNNTest single thread party numbers:50 Cost Time: 317684 milliseconds
+
+======== kNN protocols cost time:  30342 +  ms k=  10  + hospitals: 60 ==========
+  KNNTest single thread party numbers:60 Cost Time: 381020 milliseconds
+======== kNN protocols cost time:  35481 +  ms k=  10  + hospitals: 70 ==========
+  KNNTest single thread party numbers:70 Cost Time: 455550 milliseconds
+======== kNN protocols cost time:  40628 +  ms k=  10  + hospitals: 80 ==========
+  KNNTest single thread party numbers:80 Cost Time: 510236 milliseconds
+======== kNN protocols cost time:  45771 +  ms k=  10  + hospitals: 90 ==========
+  KNNTest single thread party numbers:90 Cost Time: 565441 milliseconds
