@@ -56,7 +56,7 @@ public class KNNTests {
 
 
 
-    static final int  partyNum = 90;
+    static final int  partyNum = 32;
     private PartyA[] partyAs = new PartyA[partyNum];
     private PartyB[] partyBs = new PartyB[partyNum];
 
