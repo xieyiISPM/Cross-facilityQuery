@@ -39,5 +39,5 @@ plt.subplots_adjust(left=0.1,
                     wspace=0.4,
                     hspace=0.6)
 
-plt.show()
-#plt.savefig('Combined.pdf', format='pdf')
+#plt.show()
+plt.savefig('Combined.pdf', format='pdf')
